@@ -46,7 +46,7 @@ public class clientApplication extends Application {
         cash.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
-                    cash_display(history_server());
+                    cash_display(cash_server());
                 } catch (Exception er1) {
                     er1.printStackTrace();
 
@@ -58,7 +58,7 @@ public class clientApplication extends Application {
         history.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
-                    history_display(cash_server());
+                    history_display(history_server());
                 } catch (Exception er1) {
                     er1.printStackTrace();
 
