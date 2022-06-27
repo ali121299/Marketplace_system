@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Application extends Application {
+public class clientApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
