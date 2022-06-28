@@ -73,6 +73,21 @@ public class SocketClient {
        // out.close();
         socket.close();
     }
+    
+    
+    //send string to server and recieve string
+    public string request (String request){
+	    Socket socket = connectServer(555);
+	    writeOut(request);
+	    return readIn();
+    }
+    
+    //Send string to server and recieve array from server
+    public ArrayList<String> request (String request){
+        Socket socket = connectServer(555);
+	    writeOut(request);
+	    return recieveArray();
+    }
 
 }
 
