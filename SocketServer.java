@@ -28,6 +28,7 @@ public class SocketServer {
         ss = new ServerSocket(port);
         //connect client
         socket = ss.accept();
+        new ServerThread(client).start();
     }
     
     // Read from client
