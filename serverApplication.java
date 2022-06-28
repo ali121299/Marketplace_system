@@ -12,8 +12,7 @@ public class serverApplication extends Application {
     public void start(Stage stage) throws IOException {
 
     }
-
     public static void main(String[] args) {
-        launch();
-    }
+    launch();
+}
 }
