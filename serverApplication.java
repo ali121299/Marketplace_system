@@ -14,9 +14,8 @@ public class serverApplication extends Application {
     public void start(Stage stage) throws IOException {
 
     }
-    String DB;
-    String DB_passward;
-    public float cash(String user_name) {
+
+     public float cash(String user_name) {
         ArrayList<float> temp = new ArrayList<float>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -32,8 +31,9 @@ public class serverApplication extends Application {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return items[0];
-    }
+
+    return items[0];
+}
 
     public ArrayList<String> history(String user_name) {
         ArrayList<String> temp = new ArrayList<String>();
@@ -78,11 +78,13 @@ public class serverApplication extends Application {
                 temp.add(rs.getString(i));
             }
             con.close();
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return temp;
     }
+
 
     public static void main(String[] args) {
         launch();
