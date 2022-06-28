@@ -28,6 +28,7 @@ public class clientApplication extends Application {
         window.initModality(Modality.APPLICATION_MODAL);
         StackPane layout = new StackPane();
         VBox vBox = new VBox();
+        window.setTitle("Home");
         vBox.setSpacing(6);
         Button history = new Button("History");
         Button cash = new Button("Cash");
