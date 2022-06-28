@@ -23,6 +23,9 @@ public class ServerThread extends Thread{
  
     @Override
     public void run(){
+    
+      String request = readIn();
+      if(request.equals("Search")){
  
     }
 }
