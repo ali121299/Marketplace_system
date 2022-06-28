@@ -22,7 +22,7 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text= "SELECT Current_balance FROM account,login_signup WHERE account.username =  login_signup.username AND account.username=\""+user_name+"\"";
+            String text= "SELECT Current_balance FROM account,login_signup WHERE account.Username =  login_signup.Username AND account.Username=\""+user_name+"\"";
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
                 temp.add(rs.getString(1));
@@ -42,8 +42,8 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text= "SELECT Name,price FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.item_name = items.Name " +
+            String text= "SELECT Name,price,purchase_date FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
+                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name " +
                     ;
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
@@ -67,7 +67,7 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text= "SELECT Username,Password From Login_Signup where Login_Signup.Username = \"" +user_name+"\""
+            String text= "SELECT Username,Password,mail,birthday,telephone From login_signup where login_signup.Username = \"" +user_name+"\""
                     ;
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
@@ -85,6 +85,29 @@ public class serverApplication extends Application {
         return temp;
     }
 
+    public void deposit(String user_name, float amount) {
+        ArrayList<float> temp = new ArrayList<float>();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
+            Statement stmt = con.createStatement();
+            String text= "SELECT Current_balance FROM account WHERE account.Username=\""+user_name+"\"";
+            ResultSet rs = stmt.executeQuery(text);
+            while (rs.next()) {
+                temp.add(rs.getString(1));
+            }
+            float newcash = temp[0]+amount;
+            Statement stmt1 = con.createStatement();
+            String text1= "UPDATE  account SET Current_balance = \""+newcash+"\"  WHERE  account.Username=\""+user_name+"\"";
+            stmt1.executeUpdate(text1);
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
 
     public static void main(String[] args) {
         launch();

@@ -13,7 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.io.IOException;
 
 public class clientApplication extends Application {
@@ -35,7 +37,7 @@ public class clientApplication extends Application {
         Button accountInfo = new Button("Account Information");
         Button logOut = new Button("Log Out");
 
-        vBox.getChildren().addAll(history, cash, cart, search, accountInfo,logOut);
+        vBox.getChildren().addAll(history, cash, cart, search, accountInfo,deposit,logOut);
 
 
         layout.getChildren().add(vBox);
@@ -116,6 +118,7 @@ public class clientApplication extends Application {
         deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
+                    deposit_dislay();
                 } catch (Exception er1) {
                     er1.printStackTrace();
                 }
@@ -167,8 +170,69 @@ public class clientApplication extends Application {
         window.showAndWait();
 
     }
+    public  void deposit_dislay() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        StackPane layout = new StackPane();
+        VBox vBox = new VBox();
+        vBox.setSpacing(6);
+        TextField t = new TextField("amount");
+        Button deposit = new Button("Deosit");
+        vBox.getChildren().addAll(t, deposit);
+        layout.getChildren().add(vBox);
+        Scene scene;
+        window.setTitle("Depisit");
 
 
+        scene = new Scene(layout, 400, 400);
+
+        window.setScene(scene);
+        deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                try {
+                    try {
+                        float floatValue = Float.parseFloat(t.getText());
+                        deposit_server(floatValue);
+                        valid_deposit_display();
+                    } catch (NumberFormatException e) {
+                        invalid_deposit_display();
+                    }
+
+                } catch (Exception er1) {
+                    er1.printStackTrace();
+                }
+            }
+
+        }
+        ));
+        window.showAndWait();
+    }
+    public  void valid_deposit_display() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        BorderPane layout = new BorderPane();
+        Scene scene;
+        window.setTitle("Valid Deposit");
+        Text t = new Text("Valid Deposit");
+        layout.setCenter(t);
+        scene = new Scene(layout, 400, 400);
+
+        window.setScene(scene);
+        window.showAndWait();
+    }
+    public  void invalid_deposit_display() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        BorderPane layout = new BorderPane();
+        Scene scene;
+        window.setTitle("Invalid Deposit");
+        Text t = new Text("InValid Deposit");
+        layout.setCenter(t);
+        scene = new Scene(layout, 400, 400);
+
+        window.setScene(scene);
+        window.showAndWait();
+    }
     public String cash_server(){
         String responce = new String();
 
@@ -185,6 +249,11 @@ public class clientApplication extends Application {
 
         return responce;
     }
+    public void deposit_server(float amount){
+        String responce = new String();
+
+    }
+
 
 
     public static void main(String[] args) {
