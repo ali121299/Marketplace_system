@@ -15,8 +15,20 @@ public class serverApplication extends Application {
     public void start(Stage stage) throws IOException {
 
     }
+    public ArrayList<String> parsing(String s){
+        ArrayList<String>r=new ArrayList<String>();
+        int init=0;
+        for (int i=0;i<s.length();i++){
+            if((s.charAt(i)==',')) {
 
-    public float cash(String user_name) {
+                r.add(s.substring(init,i));
+                init=i+1;
+            }
+        }
+        r.add(s.substring(init));
+        return r;
+    }
+    public String cash(String user_name)  {
         float temp=0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -33,7 +45,7 @@ public class serverApplication extends Application {
             System.out.println(e);
         }
 
-        return temp;
+        return String.valueOf(temp);
     }
 
     public ArrayList<String> history(String user_name) {
@@ -86,9 +98,14 @@ public class serverApplication extends Application {
         return temp;
     }
 
-    public void deposit(String user_name, float amount) {
-        float temp = 0;
+    public void deposit(String par) {
+        float tempfloat = 0;
         try {
+
+            ArrayList<String> temp = new ArrayList<String>();
+            temp = parsing(par);
+            String user_name = temp.get(0);
+            float amount = Float.parseFloat(temp.get(1));
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
@@ -96,9 +113,9 @@ public class serverApplication extends Application {
             String text= "SELECT Current_balance FROM account WHERE account.Username=\""+user_name+"\"";
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
-                temp = (Float.parseFloat(rs.getString(1)));
+                tempfloat = (Float.parseFloat(rs.getString(1)));
             }
-            float newcash = temp+amount;
+            float newcash = tempfloat+amount;
             Statement stmt1 = con.createStatement();
             String text1= "UPDATE  account SET Current_balance = \""+newcash+"\"  WHERE  account.Username=\""+user_name+"\"";
             stmt1.executeUpdate(text1);
