@@ -4,7 +4,7 @@ use Marketplace_System;
 CREATE TABLE Login_Signup
 (
   Username varchar(32) NOT NULL,
-  Password INT,
+  Password varchar(32),
   PRIMARY KEY (Username)
 );
 
@@ -30,9 +30,10 @@ CREATE TABLE Items
 
 CREATE TABLE Orderspecs
 (
-  OID INT NOT NULL,
+  OID INT NOT NULL AUTO_INCREMENT,
   Client_name varchar(32),
   Totalprice float,
+  date_time timestamp
   PRIMARY KEY (OID),
   FOREIGN KEY (Client_name) REFERENCES Account(Username)
 );
