@@ -64,4 +64,3 @@ CREATE TABLE Cart
 Alter Table login_signup Add mail varchar(32);
 Alter Table login_signup Add birthday date;
 Alter Table login_signup Add telephone INT;
-Alter Table Orderspecs Add purchase_date date;
