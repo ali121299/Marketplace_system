@@ -30,7 +30,7 @@ public class serverApplication extends Application {
             ResultSet names = stmt.executeQuery("select Username from Login_Signup");
             boolean exist=false;
             while(names.next()){
-                if((names.getString(1).equals(Username))) exist=true;
+                if((names.getString(1).compareToIgnoreCase(Username))==0) exist=true;
             }
             if(!exist){
                 s="non existing username!";
