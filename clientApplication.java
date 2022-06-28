@@ -29,6 +29,7 @@ public class clientApplication extends Application {
         vBox.setSpacing(6);
         Button history = new Button("History");
         Button cash = new Button("Cash");
+        Button deposit = new Button("Deposit");
         Button cart = new Button("Cart");
         Button search = new Button("Search");
         Button accountInfo = new Button("Account Information");
@@ -102,6 +103,17 @@ public class clientApplication extends Application {
         }
         ));
         logOut.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                try {
+                } catch (Exception er1) {
+                    er1.printStackTrace();
+                }
+            }
+
+        }
+        ));
+
+        deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
                 } catch (Exception er1) {
