@@ -17,6 +17,16 @@ CREATE TABLE Account
   FOREIGN KEY (Username) REFERENCES Login_Signup(Username)
 );
 
+CREATE TABLE Items
+(
+  Name varchar(32) NOT NULL,
+  Category varchar(32),
+  Price float,
+  Discount float,
+  Stock INT,
+  PRIMARY KEY (Name)
+);
+
 Alter Table login_signup Add mail varchar(32);
 Alter Table login_signup Add birthday date;
 Alter Table login_signup Add telephone INT;
