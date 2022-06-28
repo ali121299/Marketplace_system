@@ -31,6 +31,11 @@ public class clientApplication extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
+        first_page();
+
+    }
+    public void first_page(){
+        Stage stage=new Stage();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(20);
@@ -61,7 +66,6 @@ public class clientApplication extends Application {
         stage.setTitle("Market");
         stage.setScene(scene);
         stage.show();
-
     }
     public void invalidLogin(String msg) { 
         Alert alert = new Alert(AlertType.WARNING);
