@@ -8,6 +8,7 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class serverApplication extends Application {
     @Override
@@ -15,25 +16,25 @@ public class serverApplication extends Application {
 
     }
 
-     public float cash(String user_name) {
-        ArrayList<float> temp = new ArrayList<float>();
+    public float cash(String user_name) {
+        float temp=0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text= "SELECT Current_balance FROM account,login_signup WHERE account.Username =  login_signup.Username AND account.Username=\""+user_name+"\"";
+            String text= "SELECT Current_balance FROM account WHERE account.Username=\""+user_name+"\"";
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
-                temp.add(rs.getString(1));
+                temp = (Float.valueOf(rs.getString(1)));
             }
             con.close();
         } catch (Exception e) {
             System.out.println(e);
         }
 
-    return items[0];
-}
+        return temp;
+    }
 
     public ArrayList<String> history(String user_name) {
         ArrayList<String> temp = new ArrayList<String>();
@@ -43,15 +44,15 @@ public class serverApplication extends Application {
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
             String text= "SELECT Name,price,purchase_date FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name " +
+                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name "
                     ;
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
                 String tempstr = "";
-                for(int i = 1; i < 3; i++) {
+                for(int i = 1; i < 4; i++) {
                     tempstr += rs.getString(i) + ":";
                 }
-                temp.add(rs.getString(i));
+                temp.add(tempstr);
             }
             con.close();
         } catch (Exception e) {
@@ -72,10 +73,10 @@ public class serverApplication extends Application {
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
                 String tempstr = "";
-                for(int i = 1; i < 3; i++) {
+                for(int i = 1; i < 6; i++) {
                     tempstr += rs.getString(i) + ":";
                 }
-                temp.add(rs.getString(i));
+                temp.add(tempstr);
             }
             con.close();
 
@@ -86,7 +87,7 @@ public class serverApplication extends Application {
     }
 
     public void deposit(String user_name, float amount) {
-        ArrayList<float> temp = new ArrayList<float>();
+        float temp = 0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -95,9 +96,9 @@ public class serverApplication extends Application {
             String text= "SELECT Current_balance FROM account WHERE account.Username=\""+user_name+"\"";
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
-                temp.add(rs.getString(1));
+                temp = (Float.parseFloat(rs.getString(1)));
             }
-            float newcash = temp[0]+amount;
+            float newcash = temp+amount;
             Statement stmt1 = con.createStatement();
             String text1= "UPDATE  account SET Current_balance = \""+newcash+"\"  WHERE  account.Username=\""+user_name+"\"";
             stmt1.executeUpdate(text1);
