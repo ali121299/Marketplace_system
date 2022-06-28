@@ -149,7 +149,15 @@ public class clientApplication extends Application {
         TextField Birthday=new TextField();
         h4.setMargin(Birthday,new Insets(10, 10, 10, 10));
         h4.getChildren().addAll(birthday,Birthday);
-        v.getChildren().addAll(h1,h2,h3,h4);
+        HBox h5=new HBox(7);
+        h5.setAlignment(Pos.CENTER);
+        Label telephone=new Label("Telephone");
+        h5.setMargin(telephone,new Insets(10, 10, 10, 10));
+        TextField phone=new TextField();
+        h5.setMargin(phone,new Insets(10, 10, 10, 10));
+        h5.getChildren().addAll(telephone,phone);
+        Button sign=new Button("Sign Up");
+        v.getChildren().addAll(h1,h2,h3,h4,h5,sign);
         signUp.showAndWait();
     }
 
