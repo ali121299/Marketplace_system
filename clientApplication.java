@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -25,18 +26,18 @@ public class clientApplication extends Application {
 
     }
     public ArrayList<String> parsing2(String s){
-    ArrayList<String>r=new ArrayList<String>();
-    int init=0;
-    for (int i=0;i<s.length();i++){
-        if((s.charAt(i)==':')) {
+        ArrayList<String>r=new ArrayList<String>();
+        int init=0;
+        for (int i=0;i<s.length();i++){
+            if((s.charAt(i)==':')) {
 
-            r.add(s.substring(init,i));
-            init=i+1;
+                r.add(s.substring(init,i));
+                init=i+1;
+            }
         }
+        r.add(s.substring(init));
+        return r;
     }
-    r.add(s.substring(init));
-    return r;
-}
     public void home_display()  {
         Stage window = new Stage();
         window.getIcons().add(icon());
@@ -270,7 +271,7 @@ public class clientApplication extends Application {
         ArrayList<String> responce = new ArrayList<String>();
         int history_items = responce.size();
         for(int i = 0; i < history_items; i++){
-            result+=responce[i]+"\n";
+            result+=responce.get(i)+"\n";
         }
         return result;
     }
@@ -279,20 +280,19 @@ public class clientApplication extends Application {
         ArrayList<String> responce = new ArrayList<String>();
         int account_items = responce.size();
         for(int i = 0; i < account_items; i++){
-            result+="Username: "+parsing2(responce[i])[0]+"\n";
-            result+="Password: "+parsing2(responce[i])[1]+"\n";
-            result+="Mail: "+parsing2(responce[i])[2]+"\n";
-            result+="Birthday: "+parsing2(responce[i])[3]+"\n";
-            result+="Telephone: "+parsing2(responce[i])[4]+"\n";
+            result+="Username: "+ parsing2(responce.get(i)).get(0) +"\n";
+            result+="Password: "+parsing2(responce.get(i)).get(1)+"\n";
+            result+="Mail: "+parsing2(responce.get(i)).get(2)+"\n";
+            result+="Birthday: "+parsing2(responce.get(i)).get(3)+"\n";
+            result+="Telephone: "+parsing2(responce.get(i)).get(4)+"\n";
 
         }
         return result;
     }
     public void deposit_server(float amount){
-
+        String responce = new String();
 
     }
-
 
 
     public static void main(String[] args) {
