@@ -8,7 +8,7 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.io.IOException;
-<<<<<<< HEAD
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,9 +25,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-=======
+
 import java.util.ArrayList;
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
+
 
 public class serverApplication extends Application {
 
@@ -220,7 +220,7 @@ public class serverApplication extends Application {
         } 
 
     }
-<<<<<<< HEAD
+
     public ArrayList<String> parsing(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
@@ -261,20 +261,8 @@ public class serverApplication extends Application {
         return logo;
         
     }
-=======
-//    public ArrayList<String> parsing(String s){
-//        ArrayList<String>r=new ArrayList<String>();
-//        int init=0;
-//        for (int i=0;i<s.length();i++){
-//            if((s.charAt(i)==',')) {
-//
-//                r.add(s.substring(init,i));
-//                init=i+1;
-//            }
-//        }
-//        r.add(s.substring(init));
-//        return r;
-//    }
+
+
     public  String cashFunc(String user_name)  {
         float temp=0;
         try {
@@ -389,7 +377,6 @@ public class serverApplication extends Application {
 
     }
 
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
     public static void main(String[] args) {
         launch();
     }

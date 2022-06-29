@@ -8,7 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-<<<<<<< HEAD
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -22,7 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-=======
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -32,16 +32,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
+
 import javafx.stage.Stage;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.io.IOException;
-<<<<<<< HEAD
+
 import java.time.LocalDate;
-=======
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
+
 import java.util.ArrayList;
 
 public class clientApplication extends Application {
@@ -57,7 +56,7 @@ public class clientApplication extends Application {
         first_page();
 
     }
-<<<<<<< HEAD
+
     public void first_page(){
         Stage stage=new Stage();
         VBox vbox = new VBox();
@@ -240,20 +239,25 @@ public class clientApplication extends Application {
         return logo;
         
     }
-    public ArrayList<String> parsing(String s){
-        ArrayList<String>r=new ArrayList<String>();
-        int init=0;
-        for (int i=0;i<s.length();i++){
-            if((s.charAt(i)==',')) {
-                
-=======
+    public ArrayList<String> parsing(String s) {
+        ArrayList<String> r = new ArrayList<String>();
+        int init = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) == ',')) {
+
+                r.add(s.substring(init, i));
+                init = i + 1;
+            }
+        }
+        r.add(s.substring(init));
+        return r;
+    }
     public ArrayList<String> parsing2(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
         for (int i=0;i<s.length();i++){
             if((s.charAt(i)==':')) {
-
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
+                
                 r.add(s.substring(init,i));
                 init=i+1;
             }
@@ -261,8 +265,6 @@ public class clientApplication extends Application {
         r.add(s.substring(init));
         return r;
     }
-<<<<<<< HEAD
-=======
     public void home_display()  {
         Stage window = new Stage();
         //window.getIcons().add(icon());
@@ -517,7 +519,7 @@ public class clientApplication extends Application {
 
     }
 
->>>>>>> 23aefd29ecbe4c960d5f91c0c40401ef4c6df5a6
+
 
     public static void main(String[] args) {
         launch();
