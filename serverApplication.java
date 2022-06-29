@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -198,15 +199,15 @@ public class serverApplication extends Application {
         String pass=pa.get(1);
         String email=pa.get(2);
         String bir=pa.get(3);
-        String phone=pa.get(4);;
+        String phone=pa.get(4);
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/"+DB, "root",DB_password ); 
             Statement stmt = con.createStatement();
             System.out.println("hhhhh");
-            stmt.executeUpdate("insert into Login_Signup values(\""+name+"\",\""+pass+"\",\""+email+"\",\""+bir+"\",\""+phone+"\" )");
-           
+            stmt.executeUpdate("insert into Login_Signup1 values(\""+name+"\",\""+pass+"\",\""+email+"\",\""+LocalDate.parse(bir)+"\","+Integer.parseInt(phone)+" )");
+            stmt.executeUpdate("insert into account values(\""+name+"\",\"client\",0.0)");
             con.close();
         } catch (Exception e) {
             System.out.println(e);
