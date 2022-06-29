@@ -24,7 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class serverApplication extends Application {
-    Image logo=new Image("C:\\Users\\DELL\\Documents\\NetBeansProjects\\market\\src\\market\\market.jpg");
+
     String Username;
     String Password;
     String DB ;
@@ -40,7 +40,7 @@ public class serverApplication extends Application {
         Scene s=new Scene(v,300,300);
         stage.setScene(s);
         stage.setTitle("Srever screen");
-        stage.getIcons().add(logo);
+        stage.getIcons().add(icon());
         Button report= new Button("Overview report");
         report.setOnMouseClicked((new EventHandler <MouseEvent>(){
             @Override
@@ -100,7 +100,7 @@ public class serverApplication extends Application {
         Scene s=new Scene(p,500,500);
         stage.setScene(s);
         stage.setTitle("Reports screen");
-        stage.getIcons().add(logo);
+        stage.getIcons().add(icon());
         
         stage.showAndWait();
     }
