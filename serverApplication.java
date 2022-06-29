@@ -206,7 +206,7 @@ public class serverApplication extends Application {
                     "jdbc:mysql://localhost:3306/"+DB, "root",DB_password ); 
             Statement stmt = con.createStatement();
             System.out.println("hhhhh");
-            stmt.executeUpdate("insert into Login_Signup1 values(\""+name+"\",\""+pass+"\",\""+email+"\",\""+LocalDate.parse(bir)+"\","+Integer.parseInt(phone)+" )");
+            stmt.executeUpdate("insert into Login_Signup values(\""+name+"\",\""+pass+"\",\""+email+"\",\""+LocalDate.parse(bir)+"\","+Integer.parseInt(phone)+" )");
             stmt.executeUpdate("insert into account values(\""+name+"\",\"client\",0.0)");
             con.close();
         } catch (Exception e) {
