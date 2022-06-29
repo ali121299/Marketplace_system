@@ -27,7 +27,6 @@ CREATE TABLE Items
   PRIMARY KEY (Name)
 );
 
-
 CREATE TABLE Orderspecs
 (
   OID INT NOT NULL AUTO_INCREMENT,
@@ -38,7 +37,6 @@ CREATE TABLE Orderspecs
   FOREIGN KEY (Client_name) REFERENCES Account(Username)
 );
 
-
 CREATE TABLE Orderitems
 (
   OID INT NOT NULL,
@@ -48,7 +46,6 @@ CREATE TABLE Orderitems
   FOREIGN KEY (OID) REFERENCES Orderspecs(OID),
   FOREIGN KEY (Item_name) REFERENCES Items(Name)
 );
-
 
 CREATE TABLE Cart
 (
