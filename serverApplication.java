@@ -28,7 +28,7 @@ public class serverApplication extends Application {
 //        r.add(s.substring(init));
 //        return r;
 //    }
-    public String cash(String user_name)  {
+    public  String cashFunc(String user_name)  {
         float temp=0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -55,7 +55,7 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text= "SELECT Name,price,purchase_date FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
+            String text= "SELECT Name,price,date_time FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
                     "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name "
                     ;
             ResultSet rs = stmt.executeQuery(text);
