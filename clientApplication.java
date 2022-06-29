@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class clientApplication extends Application {
     
@@ -219,6 +220,19 @@ public class clientApplication extends Application {
         Image logo=new Image(path);
         return logo;
         
+    }
+    public ArrayList<String> parsing(String s){
+        ArrayList<String>r=new ArrayList<String>();
+        int init=0;
+        for (int i=0;i<s.length();i++){
+            if((s.charAt(i)==',')) {
+                
+                r.add(s.substring(init,i));
+                init=i+1;
+            }
+        }
+        r.add(s.substring(init));
+        return r;
     }
 
     public static void main(String[] args) {
