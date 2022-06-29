@@ -21,8 +21,8 @@ public class serverApplication extends Application {
 
     TextField search = new TextField();
     String Username = "batoul";
-    String DB = "onlineMarket";
-    String DB_password = "56566565";
+    String DB = "Marketplace_System";
+    String DB_password= "56566565";
     GridPane grid = new GridPane();
     GridPane root = new GridPane();
     TextField qty = new TextField();
@@ -57,7 +57,7 @@ public class serverApplication extends Application {
         ArrayList<item_qty> s = new ArrayList<item_qty>();
         String name = "";
         String am = "0";
-        for (int i = 0; i < arrOfStr.length; i++) {
+        for (int i = 0; i < arrOfStr.length-1; i++) {
             //System.out.println(arrOfStr[i]);
             if (i % 2 == 0) {
                 name = arrOfStr[i];
@@ -67,10 +67,10 @@ public class serverApplication extends Application {
 
             }
         }
-        return purchase(s);
+        return purchase(s, arrOfStr[arrOfStr.length - 1]);
     }
 
-    public int purchase(ArrayList<item_qty> items) {
+    public int purchase(ArrayList<item_qty> items, String Username) {
         float total_price = 0;
         //get total price
         for (int i = 0; i < items.size(); i++) {
@@ -230,12 +230,12 @@ public class serverApplication extends Application {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[0]);
         String item_name = arrOfStr[1];
-        System.out.println(qty + " " + item_name);
-        return edit(qty, item_name);
+        String Username = arrOfStr[2];
+        System.out.println(qty + " " + item_name+" " + Username);
+        return edit(qty, item_name, Username);
     }
-
     //edit cart
-    public int edit(int qty, String item_name) {
+    public int edit(int qty, String item_name,String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -279,8 +279,8 @@ public class serverApplication extends Application {
     }
 
     //use search to get the items in cart of certain Username
-    public ArrayList<item_qty> search(String Username) {
-        ArrayList<item_qty> items = new ArrayList<item_qty>();
+    public ArrayList<String> search(String Username) {
+        ArrayList<String> items = new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -289,7 +289,7 @@ public class serverApplication extends Application {
             ResultSet rs = stmt.executeQuery("select * from cart WHERE Username = '" + Username + "'");
 
             while (rs.next()) {
-                items.add(new item_qty(rs.getString(2), rs.getString(3)));
+                items.add(rs.getString(2)+","+rs.getString(3));
             }
             System.out.println("bassanty");
             con.close();
