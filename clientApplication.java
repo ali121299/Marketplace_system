@@ -40,7 +40,7 @@ public class clientApplication extends Application {
     }
     public void home_display()  {
         Stage window = new Stage();
-        window.getIcons().add(icon());
+        //window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         StackPane layout = new StackPane();
         VBox vBox = new VBox();
@@ -49,12 +49,13 @@ public class clientApplication extends Application {
         Button history = new Button("History");
         Button cash = new Button("Cash");
         Button deposit = new Button("Deposit");
-        Button cart = new Button("Cart");
-        Button search = new Button("Search");
+        Button c = new Button("Cart");
+//        Button search = new Button("Search");
+        Button s = new Button("Go");
         Button accountInfo = new Button("Account Information");
         Button logOut = new Button("Log Out");
-
-        vBox.getChildren().addAll(history, cash, cart, search, accountInfo,deposit,logOut);
+//vBox.getChildren().addAll(history, cash, c, search,s, accountInfo, logOut);
+        vBox.getChildren().addAll(history, cash, c, search,s, accountInfo,deposit,logOut);
         //Username
 
         layout.getChildren().add(vBox);
@@ -100,40 +101,6 @@ public class clientApplication extends Application {
         }
         ));
 
-        cart.setOnMouseClicked((new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                try {
-
-                } catch (Exception er1) {
-                    er1.printStackTrace();
-                }
-            }
-
-        }
-        ));
-
-        search.setOnMouseClicked((new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                try {
-
-                } catch (Exception er1) {
-                    er1.printStackTrace();
-                }
-            }
-
-        }
-        ));
-        logOut.setOnMouseClicked((new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                try {
-                    first_page();
-                } catch (Exception er1) {
-                    er1.printStackTrace();
-                }
-            }
-
-        }
-        ));
 
         deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -146,9 +113,40 @@ public class clientApplication extends Application {
 
         }
         ));
+
+        EventHandler<javafx.scene.input.MouseEvent> logout
+                = new EventHandler<javafx.scene.input.MouseEvent>() {
+
+            @Override
+            public void handle(javafx.scene.input.MouseEvent e) {
+                first_page();
+            }
+        };
+        logOut.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, logout);
+        //cart event handler
+        EventHandler<javafx.scene.input.MouseEvent> cart
+                = new EventHandler<javafx.scene.input.MouseEvent>() {
+
+            @Override
+            public void handle(javafx.scene.input.MouseEvent e) {
+                cartScreen();
+            }
+        };
+        c.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, cart);
+
+        EventHandler<javafx.scene.input.MouseEvent> searching
+                = new EventHandler<javafx.scene.input.MouseEvent>() {
+
+            @Override
+            public void handle(javafx.scene.input.MouseEvent e) {
+                search(search.getText());
+            }
+        };
+        s.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, searching);
         window.showAndWait();
 
     }
+
     public  void cash_display(String s) {
         Stage window = new Stage();
         window.getIcons().add(icon());
