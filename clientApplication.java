@@ -17,14 +17,29 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class clientApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
     }
+    public ArrayList<String> parsing2(String s){
+    ArrayList<String>r=new ArrayList<String>();
+    int init=0;
+    for (int i=0;i<s.length();i++){
+        if((s.charAt(i)==':')) {
+
+            r.add(s.substring(init,i));
+            init=i+1;
+        }
+    }
+    r.add(s.substring(init));
+    return r;
+}
     public void home_display()  {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         StackPane layout = new StackPane();
         VBox vBox = new VBox();
@@ -39,7 +54,7 @@ public class clientApplication extends Application {
         Button logOut = new Button("Log Out");
 
         vBox.getChildren().addAll(history, cash, cart, search, accountInfo,deposit,logOut);
-
+        //Username
 
         layout.getChildren().add(vBox);
 
@@ -87,6 +102,7 @@ public class clientApplication extends Application {
         cart.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
+
                 } catch (Exception er1) {
                     er1.printStackTrace();
                 }
@@ -98,6 +114,7 @@ public class clientApplication extends Application {
         search.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
+                    
                 } catch (Exception er1) {
                     er1.printStackTrace();
                 }
@@ -108,6 +125,7 @@ public class clientApplication extends Application {
         logOut.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
+                    first_page();
                 } catch (Exception er1) {
                     er1.printStackTrace();
                 }
@@ -132,6 +150,7 @@ public class clientApplication extends Application {
     }
     public  void cash_display(String s) {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -146,6 +165,7 @@ public class clientApplication extends Application {
 
     public  void history_display(String s) {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         ScrollPane layout = new ScrollPane();
         window.setTitle("History");
@@ -160,6 +180,7 @@ public class clientApplication extends Application {
 
     public  void account_display(String s) {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         ScrollPane layout = new ScrollPane();
         window.setTitle("Account Information");
@@ -173,6 +194,7 @@ public class clientApplication extends Application {
     }
     public  void deposit_dislay() {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         StackPane layout = new StackPane();
         VBox vBox = new VBox();
@@ -209,7 +231,9 @@ public class clientApplication extends Application {
         window.showAndWait();
     }
     public  void valid_deposit_display() {
+
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -223,6 +247,7 @@ public class clientApplication extends Application {
     }
     public  void invalid_deposit_display() {
         Stage window = new Stage();
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -241,17 +266,30 @@ public class clientApplication extends Application {
     }
 
     public String history_server(){
-        String responce = new String();
-
-        return responce;
+        String result = new String("Item name:price:date\n");
+        ArrayList<String> responce = new ArrayList<String>();
+        int history_items = responce.size();
+        for(int i = 0; i < history_items; i++){
+            result+=responce[i]+"\n";
+        }
+        return result;
     }
     public String account_server(){
-        String responce = new String();
+        String result = new String();
+        ArrayList<String> responce = new ArrayList<String>();
+        int account_items = responce.size();
+        for(int i = 0; i < account_items; i++){
+            result+="Username: "+parsing2(responce[i])[0]+"\n";
+            result+="Password: "+parsing2(responce[i])[1]+"\n";
+            result+="Mail: "+parsing2(responce[i])[2]+"\n";
+            result+="Birthday: "+parsing2(responce[i])[3]+"\n";
+            result+="Telephone: "+parsing2(responce[i])[4]+"\n";
 
-        return responce;
+        }
+        return result;
     }
     public void deposit_server(float amount){
-        String responce = new String();
+
 
     }
 
