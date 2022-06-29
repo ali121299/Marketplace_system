@@ -60,7 +60,14 @@ CREATE TABLE Cart
   FOREIGN KEY (Item_name) REFERENCES Items(Name)
 );
 
+CREATE TABLE Market
+(
+Cash float,
+PRIMARY KEY (Cash)
+);
+
 
 Alter Table login_signup Add mail varchar(32);
 Alter Table login_signup Add birthday date;
 Alter Table login_signup Add telephone INT;
+Insert into market values(0);
