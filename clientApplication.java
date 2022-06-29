@@ -16,18 +16,5 @@ public class clientApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-    static void insert (){
- try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                   "jdbc:mysql://localhost:3306/" + "marketplace_System", "root", "01119023565");
-           PreparedStatement stmt = con.prepareStatement("insert into login_signup values(\"please\",14)");
-           stmt.executeUpdate();
-           con.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-
-    }
+   
 }
