@@ -52,8 +52,8 @@ public class clientApplication extends Application {
         return result;
     }
 
-    public void search(Stage primaryStage, String item_name) {
-        //connect to server call searchForItem(item_name)
+    public void search(String item_name) {
+
         ArrayList<String> items = searchForItem(item_name);
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i));
@@ -75,7 +75,9 @@ public class clientApplication extends Application {
                 String name = l.getText();
                 int amount = Integer.parseInt(qty.getText());
                 System.out.println(name + " " + amount);
-                addToCart(name, amount);
+                String qi = name + " " + amount;
+                String reply = request1("add2cart", qi);
+                //addToCart(name, amount);
             }
         };
         System.out.println("here");
@@ -99,17 +101,18 @@ public class clientApplication extends Application {
         Stage newWindow = new Stage();
         newWindow.setTitle("searched items");
         newWindow.setScene(scene);
-        newWindow.getIcons().add(icon());
 
         // Set position of second window, related to primary window.
-        newWindow.setX(primaryStage.getX() + 200);
-        newWindow.setY(primaryStage.getY() + 100);
+//        newWindow.setX(primaryStage.getX() + 200);
+//        newWindow.setY(primaryStage.getY() + 100);
 
         newWindow.show();
     }
 
-       public void cartScreen(Stage primaryStage) {
-        ArrayList<item_qty> items = search();
+public void cartScreen() {
+        //ArrayList<item_qty> items = search();
+        String qi = Username;
+        ArrayList<item_qty> items = request1("search", qi);
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i).name + " " + items.get(i).qty);
         }
@@ -127,7 +130,7 @@ public class clientApplication extends Application {
                 = new EventHandler<javafx.scene.input.MouseEvent>() {
 
             @Override
-public void handle(javafx.scene.input.MouseEvent e) {
+            public void handle(javafx.scene.input.MouseEvent e) {
                 System.out.println("hiii");
                 System.out.println(GridPane.getRowIndex((Button) e.getSource()) + " " + GridPane.getColumnIndex((Button) e.getSource()));
                 int row = GridPane.getRowIndex((Button) e.getSource());
@@ -151,9 +154,11 @@ public void handle(javafx.scene.input.MouseEvent e) {
                 int row = GridPane.getRowIndex((Button) e.getSource());
                 int column = GridPane.getColumnIndex((Button) e.getSource());
                 Node n = getNodeByRowColumnIndex(row, 0, grid);
+                //Node q = getNodeByRowColumnIndex(row, 0, grid);
                 Label l = (Label) n;
                 System.out.println(l.getText());
-                editScreen(primaryStage, l.getText());
+                //edit(l.getText());
+                editScreen(l.getText());
 
             }
         };
@@ -174,7 +179,7 @@ public void handle(javafx.scene.input.MouseEvent e) {
         int i = 0;
         for (i = 0; i < items.size(); i++) {
             Label l = new Label(items.get(i).name);
-           String amount = String.valueOf((int)Float.parseFloat(items.get(i).qty));
+            String amount = String.valueOf((int)Float.parseFloat(items.get(i).qty));
             Button q = new Button(amount);
             Button e = new Button("edit");
             Button r = new Button("remove");
@@ -189,16 +194,17 @@ public void handle(javafx.scene.input.MouseEvent e) {
         Stage newWindow = new Stage();
         newWindow.setTitle("Cart");
         newWindow.setScene(scene);
-        newWindow.getIcons().add(icon());
+
         // Set position of second window, related to primary window.
-        newWindow.setX(primaryStage.getX() + 200);
-        newWindow.setY(primaryStage.getY() + 100);
+//        newWindow.setX(primaryStage.getX() + 200);
+//        newWindow.setY(primaryStage.getY() + 100);
 
         newWindow.show();
         //from https://o7planning.org/11533/open-a-new-window-in-javafx
     }
 
-    public void editScreen(Stage primaryStage, String item_name) {
+    public void editScreen(String item_name) {
+        
         Label q = new Label("quantity");
         Button ok = new Button("OK");
         ok.setOnAction(new EventHandler<ActionEvent>() {
@@ -207,7 +213,9 @@ public void handle(javafx.scene.input.MouseEvent e) {
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub  
                 System.out.println(Integer.parseInt(qty.getText()) + " " + item_name);
-                edit(Integer.parseInt(qty.getText()), item_name);
+                String qi = Integer.parseInt(qty.getText()) + " " + item_name;
+                reply = request1("edit", qi);
+                //edit(Integer.parseInt(qty.getText()), item_name);
             }
         });
         VBox root = new VBox();
@@ -217,11 +225,11 @@ public void handle(javafx.scene.input.MouseEvent e) {
         Stage newWindow = new Stage();
         newWindow.setTitle("Cart");
         newWindow.setScene(scene);
-        newWindow.getIcons().add(icon());
+        
 
         // Set position of second window, related to primary window.
-        newWindow.setX(primaryStage.getX() + 200);
-        newWindow.setY(primaryStage.getY() + 100);
+//        newWindow.setX(primaryStage.getX() + 200);
+//        newWindow.setY(primaryStage.getY() + 100);
 
         newWindow.show();
     }
