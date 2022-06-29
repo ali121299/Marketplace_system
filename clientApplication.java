@@ -164,6 +164,33 @@ public class clientApplication extends Application {
         v.getChildren().addAll(h1,h2,h3,h4,h5,sign);
         signUp.showAndWait();
     }
+    public Image icon(){
+        String path="";
+        try {
+            String currentPath = new java.io.File(".").getCanonicalPath();
+
+            System.out.println(currentPath);
+            char c='/';
+            for(int i=0;i<currentPath.length();i++){
+                if(currentPath.charAt(i)=='/') {
+                    c='/';
+                    break;
+                }
+                else if(currentPath.charAt(i)=='\\'){
+                c='\\';
+            }
+            }
+
+          path=currentPath+c+"market.jpg";
+
+        
+        } catch (Exception e) {
+
+        }
+        Image logo=new Image(path);
+        return logo;
+        
+    }
 
     public static void main(String[] args) {
         launch();

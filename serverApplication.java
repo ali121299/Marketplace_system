@@ -226,6 +226,33 @@ public class serverApplication extends Application {
         r.add(s.substring(init));
         return r;
     }
+    public Image icon(){
+        String path="";
+        try {
+            String currentPath = new java.io.File(".").getCanonicalPath();
+
+            System.out.println(currentPath);
+            char c='/';
+            for(int i=0;i<currentPath.length();i++){
+                if(currentPath.charAt(i)=='/') {
+                    c='/';
+                    break;
+                }
+                else if(currentPath.charAt(i)=='\\'){
+                c='\\';
+            }
+            }
+
+          path=currentPath+c+"market.jpg";
+
+        
+        } catch (Exception e) {
+
+        }
+        Image logo=new Image(path);
+        return logo;
+        
+    }
     public static void main(String[] args) {
     launch();
 }
