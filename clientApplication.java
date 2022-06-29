@@ -185,7 +185,7 @@ public class clientApplication extends Application {
                 Phone=Integer.parseInt(phone.getText());
                 String s=Username+","+Password+","+mail+","+String.valueOf(birth)+","+String.valueOf(Phone);
                 //signUp_handler(s);
-//                request1("signup",s);
+                requestvoid("signup",s);
                 signUp.close();
                 //first_page();
             }            
