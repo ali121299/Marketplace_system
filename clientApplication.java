@@ -114,7 +114,7 @@ public class clientApplication extends Application {
         search.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
-                    
+
                 } catch (Exception er1) {
                     er1.printStackTrace();
                 }
