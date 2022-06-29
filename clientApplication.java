@@ -81,7 +81,7 @@ public class clientApplication extends Application {
         Scene s=new Scene(v,300,300);
         login.setScene(s);
         login.setTitle("Login screen");
-        login.getIcons().add(logo);
+        login.getIcons().add(icon());
         HBox h1=new HBox(7);
         h1.setAlignment(Pos.CENTER);
         Label username=new Label("Username");
@@ -107,9 +107,19 @@ public class clientApplication extends Application {
                 Password=password.getText();                
                 System.out.println(Username);
                 System.out.println(Password);
-                //invalid login
-                //invalidLogin(Username);
-                //login.close();
+                String st=Username+","+Password;
+                String s=request1("login",st);
+//                String s=loginValidation(st);
+                if((s.compareToIgnoreCase("successful login"))==0) {
+                    login.close();
+                    home_display();
+                    
+                }
+                else {
+                    login.close();
+                    invalidLogin(s);
+                    
+                }
             }            
         }));
         v.getChildren().addAll(h1,h2,Login);
