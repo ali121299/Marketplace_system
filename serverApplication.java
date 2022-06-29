@@ -192,6 +192,27 @@ public class serverApplication extends Application {
         return s;
   
     }
+    public void signUp_handler(String s){
+        ArrayList <String>pa =parsing(s);
+        String name=pa.get(0);
+        String pass=pa.get(1);
+        String email=pa.get(2);
+        String bir=pa.get(3);
+        String phone=pa.get(4);;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/"+DB, "root",DB_password ); 
+            Statement stmt = con.createStatement();
+            System.out.println("hhhhh");
+            stmt.executeUpdate("insert into Login_Signup values(\""+name+"\",\""+pass+"\",\""+email+"\",\""+bir+"\",\""+phone+"\" )");
+           
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+    }
     public ArrayList<String> parsing(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
