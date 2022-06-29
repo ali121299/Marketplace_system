@@ -25,6 +25,9 @@ public class clientApplication extends Application {
     public void start(Stage stage) throws IOException {
 
     }
+    public String removebrackets(String s){
+        return s.substring(1,s.length()-2);
+    }
     public ArrayList<String> parsing2(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
@@ -260,13 +263,16 @@ public class clientApplication extends Application {
     }
     public String cash_server(){
         String responce = new String();
-
+        responce = request1("cash",Username);
         return responce;
     }
 
     public String history_server(){
         String result = new String("Item name:price:date\n");
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("history",Username);
+        String s1 = removebrackets(s);
+        responce = parsing(s1);
         int history_items = responce.size();
         for(int i = 0; i < history_items; i++){
             result+=responce.get(i)+"\n";
@@ -276,6 +282,9 @@ public class clientApplication extends Application {
     public String account_server(){
         String result = new String();
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("account",Username);
+        String s1 = removebrackets(s);
+        responce = parsing(s1);
         int account_items = responce.size();
         for(int i = 0; i < account_items; i++){
             result+="Username: "+ parsing2(responce.get(i)).get(0) +"\n";
@@ -288,7 +297,8 @@ public class clientApplication extends Application {
         return result;
     }
     public void deposit_server(float amount){
-        String responce = new String();
+        String send = new String(Username+","+String.valueOf(amount));
+        requestvoid("deposit",send);
 
     }
 

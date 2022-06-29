@@ -130,7 +130,7 @@ public class serverApplication extends Application {
             String text= "SELECT Current_balance FROM account WHERE account.Username=\""+user_name+"\"";
             ResultSet rs = stmt.executeQuery(text);
             while (rs.next()) {
-                tempfloat = rs.getFloat(1));
+                tempfloat = rs.getFloat(1);
             }
             float newcash = tempfloat+amount;
             String text1= "UPDATE  account SET Current_balance = \""+newcash+"\"  WHERE  account.Username=\""+user_name+"\"";
