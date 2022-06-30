@@ -37,11 +37,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.io.*;
-import java.net.*;
-import java.util.*;
 
-public class serverApplication extends Application {
+
+public class Server extends Application {
 
 
     TextField search = new TextField();
@@ -769,11 +767,8 @@ public class serverApplication extends Application {
         }
 
     }
-    
-
-
- 
 }
+
 /////////////////////////////////////mariamwaleed
 public class ServerThread extends Thread {
     ///////////////////////////////////////////////////global variables////////////////////////////////////////
