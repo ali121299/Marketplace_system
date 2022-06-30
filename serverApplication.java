@@ -435,7 +435,14 @@ public class serverApplication extends Application {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+    String Username;
+    String Password;
+    String DB ;
+    String DB_password;
+>>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
     @Override
     public void start(Stage stage) throws IOException {
         server_screen();
@@ -663,10 +670,18 @@ public class serverApplication extends Application {
         
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
     public static void main(String[] args) {
         launch();
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
 
     public  String cashFunc(String user_name)  {
         float temp=0;
@@ -782,5 +797,11 @@ public class serverApplication extends Application {
 
     }
 
+<<<<<<< HEAD
 
+=======
+    public static void main(String[] args) {
+        launch();
+    }
+>>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
 }
