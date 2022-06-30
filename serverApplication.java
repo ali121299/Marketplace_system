@@ -54,36 +54,37 @@ public class serverApplication extends Application {
 
     public int purchase(String message) {
         String[] arrOfStr = message.split(",");
-        ArrayList<item_qty> s = new ArrayList<item_qty>();
+        ArrayList<String> s = new ArrayList<String>();
         String name = "";
-        String am = "0";
         for (int i = 0; i < arrOfStr.length-1; i++) {
             //System.out.println(arrOfStr[i]);
             if (i % 2 == 0) {
                 name = arrOfStr[i];
             } else {
-                am = arrOfStr[i];
-                s.add(new item_qty(name, am));
+                name = name+","+ arrOfStr[i];
+                s.add(name);
+                name ="";
 
             }
         }
         return purchase(s, arrOfStr[arrOfStr.length - 1]);
     }
 
-    public int purchase(ArrayList<item_qty> items, String Username) {
+        public int purchase(ArrayList<String> items, String Username) {
         float total_price = 0;
         //get total price
         for (int i = 0; i < items.size(); i++) {
-            System.out.println(items.get(i).name + " " + items.get(i).qty);
+            String[] a = items.get(i).split(",");
+            System.out.println(a[0] + " " +   Float.parseFloat(a[1]));
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + items.get(i).name + "'");
+                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + a[0]+ "'");
                 while (rs.next()) {
                     System.out.println(rs.getString(1));
-                    total_price = total_price + (Float.parseFloat(rs.getString(1)) * Float.parseFloat(items.get(i).qty));
+                    total_price = total_price + (Float.parseFloat(rs.getString(1)) * Float.parseFloat(a[1]));
                 }
                 con.close();
             } catch (Exception e) {
@@ -156,11 +157,12 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             for (int i = 0; i < items.size(); i++) {
-                System.out.println(items.get(i).name + " " + items.get(i).qty);
+                String[] a = items.get(i).split(",");
+                System.out.println(a[0] + " " +  Float.parseFloat(a[1]));
                 PreparedStatement stmt = con.prepareStatement("insert into Orderitems values(?,?,?)");
                 stmt.setInt(1, OID);
-                stmt.setString(2, items.get(i).name);
-                stmt.setFloat(3, Float.parseFloat(items.get(i).qty));
+                stmt.setString(2, a[0]);
+                stmt.setFloat(3, Float.parseFloat(a[1]));
                 stmt.executeUpdate();
             }
             con.close();
@@ -210,12 +212,12 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             Statement stmt = con.createStatement();
-            ResultSet r = stmt.executeQuery("select cash from Market");
+            ResultSet r = stmt.executeQuery("select cash from Market WHERE id = 1");
             while (r.next()) {
                 old_cash = r.getInt(1);
             }
             new_cash = new_cash + old_cash;
-            String query = "UPDATE Market SET cash =" + new_cash;
+            String query = "UPDATE Market SET cash ="+ new_cash + "WHERE id = 1";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.executeUpdate();
             con.close();
