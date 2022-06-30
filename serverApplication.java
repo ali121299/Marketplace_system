@@ -687,7 +687,7 @@ public class serverApplication extends Application {
         return String.valueOf(temp);
     }
 
-    public ArrayList<String> history(String user_name) {
+        public ArrayList<String> history(String user_name) {
         ArrayList<String> temp = new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -735,46 +735,6 @@ public class serverApplication extends Application {
         }
         return temp;
     }
-//    public ArrayList<String> accountInfo(String user_name) {
-//        ArrayList<String> temp = new ArrayList<String>();
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            Connection con1 = DriverManager.getConnection(
-//                    "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
-//
-//            String text1= "SELECT Username From login_signup where login_signup.Username = \"" +user_name+"\";SELECT Password From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\"" +
-//                    ";SELECT mail From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";SELECT birthday From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";" +
-//                    "SELECT telephone From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";";
-//                    ;
-//            String text2= "SELECT Password From login_signup where login_signup.Username = \"" +user_name+"\""
-//                    ;
-//            String text3= "SELECT mail From login_signup where login_signup.Username = \"" +user_name+"\""
-//                    ;
-//            String text4= "SELECT birthday From login_signup where login_signup.Username = \"" +user_name+"\""
-//                    ;
-//            String text5= "SELECT telephone From login_signup where login_signup.Username = \"" +user_name+"\""
-//                    ;
-//            ResultSet rs1 = stmt1.executeQuery(text1);
-//            ResultSet rs2 = stmt2.executeQuery(text2);
-//            ResultSet rs3 = stmt3.executeQuery(text3);
-//            ResultSet rs4 = stmt4.executeQuery(text4);
-//            ResultSet rs5 = stmt5.executeQuery(text5);
-//            while (rs1.next()) {
-//                String tempstr = "";
-//                tempstr += rs1.getString(1) + ":" + rs2.getString(1) + ":" + rs3.getString(1) + ":" + String.valueOf(rs4.getDate(1))
-//                        + ":" + String.valueOf(rs5.getInt(1));
-//                temp.add(tempstr);
-//            }
-//
-//            con1.close();
-//
-//
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return temp;
-//    }
-
     public void deposit(String par) {
         float tempfloat = 0;
         try {
