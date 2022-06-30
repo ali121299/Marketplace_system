@@ -37,7 +37,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class serverApplication extends Application {
 
@@ -887,3 +889,31 @@ public class ServerThread extends Thread {
 //    }
     
 }}
+///////////////////////////////////////////////////////////////FinalServer
+class Finalserver {
+   public ServerSocket ss;
+    public Socket socket;
+    public DataInputStream in;
+    public DataOutputStream out;
+    public BufferedReader br;
+    /**
+     * @param args the command line arguments
+     */
+    
+    public Finalserver() throws IOException{
+       ss=new ServerSocket(333) ;
+        System.out.println("waiting for a client");
+        while (true) {
+            socket=ss.accept();
+            System.out.println("connected");
+            new ServerThread(socket).start();
+    
+    
+    }}
+    
+    public static void main(String[] args) throws IOException {
+        // TODO code application logic here
+         Finalserver server=new Finalserver();
+    }
+    
+}
