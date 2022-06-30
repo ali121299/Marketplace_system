@@ -55,12 +55,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class clientApplication extends Application {
-<<<<<<< HEAD
 
     TextField search = new TextField();
-    String Username = "batoul";
-    String DB = "onlineMarket";
-    String pwd = "56566565";
+    String Username;
     GridPane grid = new GridPane();
     GridPane root = new GridPane();
     TextField qty = new TextField();
@@ -237,7 +234,6 @@ public void cartScreen() {
 //        newWindow.setY(primaryStage.getY() + 100);
 
         newWindow.show();
-        //from https://o7planning.org/11533/open-a-new-window-in-javafx
     }
 
     public void editScreen(String item_name) {
@@ -271,15 +267,12 @@ public void cartScreen() {
         newWindow.show();
     }
 
-=======
-    
-    String Username;
+
     String Password;
     String mail;
     LocalDate birth;
     int Phone;
-    
->>>>>>> da86a8adcc6fe78824275a7749170eb982e2b307
+
     @Override
     public void start(Stage stage) throws IOException {
         first_page();
