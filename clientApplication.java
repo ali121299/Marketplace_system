@@ -116,7 +116,7 @@ public class clientApplication extends Application {
                 System.out.println(name + " " + amount);
                 String qi = name + " " + amount;
                 String reply = request1("add2cart", qi);
-                if(Integer.parseInt(reply) == -1){
+                if (Integer.parseInt(reply) == -1) {
                     //pop up window
                 }
                 //addToCart(name, amount);
@@ -150,13 +150,13 @@ public class clientApplication extends Application {
         newWindow.showAndWait();
     }
 
-        public void cartScreen() {
+    public void cartScreen() {
         String it = "";
-        ArrayList<String> items = request1("search",Username);
+        ArrayList<String> items = request1("search", Username);
         for (int i = 0; i < items.size(); i++) {
             String[] item = items.get(i).split(",");
             System.out.println(item[0] + " " + Float.parseFloat(item[1]));
-            it = it + items.get(i)+",";
+            it = it + items.get(i) + ",";
         }
         it = it + Username;
         final String ite = it;
@@ -165,7 +165,7 @@ public class clientApplication extends Application {
 
             @Override
             public void handle(javafx.scene.input.MouseEvent e) {
-                request1("purchase",ite);
+                request1("purchase", ite);
 
             }
         };
@@ -184,7 +184,7 @@ public class clientApplication extends Application {
                 Button qty = (Button) q;
                 System.out.println("names" + l.getText() + "," + qty.getText());
                 System.out.println("here");
-                requestvoid("remove",l.getText()+","+(int) Float.parseFloat(qty.getText())+","+Username);
+                requestvoid("remove", l.getText() + "," + (int) Float.parseFloat(qty.getText()) + "," + Username);
                 //remove(l.getText()+","+(int) Float.parseFloat(qty.getText())+","+"batoul");
                 System.out.println("here");
             }
@@ -246,7 +246,7 @@ public class clientApplication extends Application {
 //        newWindow.setY(primaryStage.getY() + 100);
         newWindow.showAndWait();
     }
-        
+
     public void editScreen(String item_name) {
 
         Label q = new Label("quantity");
@@ -256,8 +256,8 @@ public class clientApplication extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub  
-                System.out.println(Integer.parseInt(qty.getText()) + "," + item_name+","+"batoul");
-                int reply = Integer.parseInt(request1(Integer.parseInt(qty.getText()) + "," + item_name+","+Username));
+                System.out.println(Integer.parseInt(qty.getText()) + "," + item_name + "," + "batoul");
+                int reply = Integer.parseInt(request1(Integer.parseInt(qty.getText()) + "," + item_name + "," + Username));
                 //edit(Integer.parseInt(qty.getText()) + "," + item_name+","+"batoul");
             }
         });
@@ -708,10 +708,12 @@ public class clientApplication extends Application {
         window.showAndWait();
     }
 
+    public String removebrackets(String s) {
+        return s.substring(1, s.length() - 2);
+    }
 
-
-    public String cash_server(){
-        String responce = request1("cash",Username);
+    public String cash_server() {
+        String responce = request1("cash", Username);
 
         return responce;
     }
@@ -719,7 +721,7 @@ public class clientApplication extends Application {
     public String history_server() {
         String result = new String("Item name:price:date\n");
         ArrayList<String> responce = new ArrayList<String>();
-        String s = request1("history",Username);
+        String s = request1("history", Username);
         String s2 = removebrackets(s);
         responce = parsing(s2);
 
@@ -733,7 +735,7 @@ public class clientApplication extends Application {
     public String account_server() {
         String result = new String();
         ArrayList<String> responce = new ArrayList<String>();
-        String s = request1("account",Username);
+        String s = request1("account", Username);
         String s2 = removebrackets(s);
         responce = parsing(s2);
         int account_items = responce.size();
@@ -748,10 +750,8 @@ public class clientApplication extends Application {
         return result;
     }
 
-
-
-    public void deposit_server(float amount){
-        requestvoid("deposit",Username+","+String.valueOf(amount));
+    public void deposit_server(float amount) {
+        requestvoid("deposit", Username + "," + String.valueOf(amount));
 
     }
 
