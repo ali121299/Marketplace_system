@@ -707,16 +707,25 @@ public class clientApplication extends Application {
         window.setScene(scene);
         window.showAndWait();
     }
+<<<<<<< HEAD
 
     public String cash_server() {
         String responce = new String();
 
+=======
+    public String cash_server(){
+        String responce = request1("cash",Username);
+>>>>>>> 783b67937179defed7b10480509ba5393e820459
         return responce;
     }
 
     public String history_server() {
         String result = new String("Item name:price:date\n");
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("history",Username);
+        String s2 = removebrackets(s);
+        responce = parsing(s2);
+
         int history_items = responce.size();
         for (int i = 0; i < history_items; i++) {
             result += responce.get(i) + "\n";
@@ -727,6 +736,9 @@ public class clientApplication extends Application {
     public String account_server() {
         String result = new String();
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("account",Username);
+        String s2 = removebrackets(s);
+        responce = parsing(s2);
         int account_items = responce.size();
         for (int i = 0; i < account_items; i++) {
             result += "Username: " + parsing2(responce.get(i)).get(0) + "\n";
@@ -738,9 +750,14 @@ public class clientApplication extends Application {
         }
         return result;
     }
+<<<<<<< HEAD
 
     public void deposit_server(float amount) {
         String responce = new String();
+=======
+    public void deposit_server(float amount){
+        requestvoid("deposit",Username+","+String.valueOf(amount));
+>>>>>>> 783b67937179defed7b10480509ba5393e820459
 
     }
 
