@@ -464,33 +464,33 @@ public class clientApplication extends Application {
 
     }
 
-//    public ArrayList<String> parsing(String s) {
-//        ArrayList<String> r = new ArrayList<String>();
-//        int init = 0;
-//        for (int i = 0; i < s.length(); i++) {
-//            if ((s.charAt(i) == ',')) {
-//
-//                r.add(s.substring(init, i));
-//                init = i + 1;
-//            }
-//        }
-//        r.add(s.substring(init));
-//        return r;
-//    }
+    public ArrayList<String> parsing(String s) {
+        ArrayList<String> r = new ArrayList<String>();
+        int init = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) == ',')) {
 
-//    public ArrayList<String> parsing2(String s) {
-//        ArrayList<String> r = new ArrayList<String>();
-//        int init = 0;
-//        for (int i = 0; i < s.length(); i++) {
-//            if ((s.charAt(i) == ':')) {
-//
-//                r.add(s.substring(init, i));
-//                init = i + 1;
-//            }
-//        }
-//        r.add(s.substring(init));
-//        return r;
-//    }
+                r.add(s.substring(init, i));
+                init = i + 1;
+            }
+        }
+        r.add(s.substring(init));
+        return r;
+    }
+
+    public ArrayList<String> parsing2(String s) {
+        ArrayList<String> r = new ArrayList<String>();
+        int init = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) == ':')) {
+
+                r.add(s.substring(init, i));
+                init = i + 1;
+            }
+        }
+        r.add(s.substring(init));
+        return r;
+    }
 
     public void home_display() {
         Stage window = new Stage();
@@ -707,15 +707,12 @@ public class clientApplication extends Application {
         window.setScene(scene);
         window.showAndWait();
     }
-<<<<<<< HEAD
 
-    public String cash_server() {
-        String responce = new String();
 
-=======
+
     public String cash_server(){
         String responce = request1("cash",Username);
->>>>>>> 783b67937179defed7b10480509ba5393e820459
+
         return responce;
     }
 
@@ -750,14 +747,11 @@ public class clientApplication extends Application {
         }
         return result;
     }
-<<<<<<< HEAD
 
-    public void deposit_server(float amount) {
-        String responce = new String();
-=======
+
+
     public void deposit_server(float amount){
         requestvoid("deposit",Username+","+String.valueOf(amount));
->>>>>>> 783b67937179defed7b10480509ba5393e820459
 
     }
 

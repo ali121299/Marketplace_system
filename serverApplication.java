@@ -50,6 +50,9 @@ public class serverApplication extends Application {
     GridPane root = new GridPane();
     TextField qty = new TextField();
 
+    String Password;
+
+
     class item_qty {
 
         String name;
@@ -332,7 +335,7 @@ public class serverApplication extends Application {
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             Statement stmt = con.createStatement();
             String sql = "SELECT * FROM items WHERE ( Name LIKE'%" + item_name + "%') AND (category LIKE'%" + category_name + "%')";
-            //from https://stackoverflow.com/questions/5373921/adding-a-variable-into-a-sql-statement-in-java
+            
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -430,14 +433,11 @@ public class serverApplication extends Application {
         }
     }
 
-<<<<<<< HEAD
 
-=======
-    String Username;
-    String Password;
-    String DB ;
-    String DB_password;
->>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
+
+
+   
+
     @Override
     public void start(Stage stage) throws IOException {
         server_screen();
@@ -665,18 +665,12 @@ public class serverApplication extends Application {
         
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
     public static void main(String[] args) {
         launch();
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
 
     public  String cashFunc(String user_name)  {
         float temp=0;
@@ -774,11 +768,6 @@ public class serverApplication extends Application {
 
     }
 
-<<<<<<< HEAD
 
-=======
-    public static void main(String[] args) {
-        launch();
-    }
->>>>>>> 83e8884af161729c8bf17e44196e775c4891b513
+ 
 }
