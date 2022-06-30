@@ -41,7 +41,7 @@ import java.util.ArrayList;
 
 public class serverApplication extends Application {
 
-<<<<<<< HEAD
+
     TextField search = new TextField();
     String Username = "batoul";
     String DB = "Marketplace_System";
@@ -435,12 +435,10 @@ public class serverApplication extends Application {
         }
     }
 
-=======
     String Username;
     String Password;
     String DB ;
     String DB_password;
->>>>>>> da86a8adcc6fe78824275a7749170eb982e2b307
     @Override
     public void start(Stage stage) throws IOException {
         server_screen();
@@ -668,12 +666,12 @@ public class serverApplication extends Application {
         
     }
 
-<<<<<<< HEAD
+
     public static void main(String[] args) {
         launch();
     }
 
-=======
+
 
     public  String cashFunc(String user_name)  {
         float temp=0;
@@ -792,5 +790,4 @@ public class serverApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
->>>>>>> da86a8adcc6fe78824275a7749170eb982e2b307
 }
