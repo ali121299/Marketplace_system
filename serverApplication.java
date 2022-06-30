@@ -93,18 +93,18 @@ public class serverApplication extends Application {
         return purchase(s, arrOfStr[arrOfStr.length - 1]);
     }
 
-        public int purchase(ArrayList<String> items, String Username) {
+    public int purchase(ArrayList<String> items, String Username) {
         float total_price = 0;
         //get total price
         for (int i = 0; i < items.size(); i++) {
             String[] a = items.get(i).split(",");
-            System.out.println(a[0] + " " +   Float.parseFloat(a[1]));
+            System.out.println(a[0] + " " + Float.parseFloat(a[1]));
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + a[0]+ "'");
+                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + a[0] + "'");
                 while (rs.next()) {
                     System.out.println(rs.getString(1));
                     total_price = total_price + (Float.parseFloat(rs.getString(1)) * Float.parseFloat(a[1]));
@@ -117,6 +117,7 @@ public class serverApplication extends Application {
         }
         //check balance
         float cash = 0;
+        System.out.println(Username);
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -181,7 +182,7 @@ public class serverApplication extends Application {
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             for (int i = 0; i < items.size(); i++) {
                 String[] a = items.get(i).split(",");
-                System.out.println(a[0] + " " +  Float.parseFloat(a[1]));
+                System.out.println(a[0] + " " + Float.parseFloat(a[1]));
                 PreparedStatement stmt = con.prepareStatement("insert into Orderitems values(?,?,?)");
                 stmt.setInt(1, OID);
                 stmt.setString(2, a[0]);
@@ -201,10 +202,10 @@ public class serverApplication extends Application {
 //here sonoo is database name, root is username and password  
             Statement stmt = con.createStatement();
             //ResultSet rs = stmt.executeQuery("UPDATE cart SET amount = " + qty + "WHERE (item_name = '" + item_name + "') AND (Username= '" + Username + "')");
-
+            cash = cash - total_price;
             String query = "UPDATE Account SET Current_balance = ? WHERE (Username= ?)";
             PreparedStatement preparedStmt = con.prepareStatement(query);
-            preparedStmt.setFloat(1, cash - total_price);
+            preparedStmt.setFloat(1, cash);
             preparedStmt.setString(2, Username);
             // execute the java preparedstatement
             preparedStmt.executeUpdate();
@@ -227,21 +228,15 @@ public class serverApplication extends Application {
             System.out.println(e);
         }
         System.out.println("finish cart");
-        //update market
-        float new_cash = 0;
-        float old_cash = 0;
+         //update market
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             Statement stmt = con.createStatement();
-            ResultSet r = stmt.executeQuery("select cash from Market WHERE id = 1");
-            while (r.next()) {
-                old_cash = r.getInt(1);
-            }
-            new_cash = new_cash + old_cash;
-            String query = "UPDATE Market SET cash ="+ new_cash + "WHERE id = 1";
+            String query = "UPDATE Market SET cash = cash + "+total_price+ "WHERE market_id = 1";
             PreparedStatement preparedStmt = con.prepareStatement(query);
+            //preparedStmt.setFloat(1, new_cash);
             preparedStmt.executeUpdate();
             con.close();
         } catch (Exception e) {

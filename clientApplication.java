@@ -61,6 +61,11 @@ public class clientApplication extends Application {
     GridPane grid = new GridPane();
     GridPane root = new GridPane();
     TextField qty = new TextField();
+    String Password;
+    String mail;
+    LocalDate birth;
+    int Phone;
+
     class item_qty {
 
         String name;
@@ -71,8 +76,8 @@ public class clientApplication extends Application {
             qty = q;
         }
     }
-    
-        private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
+
+    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         Node result = null;
         ObservableList<Node> childrens = gridPane.getChildren();
 
@@ -87,8 +92,8 @@ public class clientApplication extends Application {
     }
 
     public void search(String item_name) {
-
-        ArrayList<String> items = searchForItem(item_name);
+        ArrayList<String> items = parsing(removebrackets(request1("search", item_name)));
+        //ArrayList<String> items = searchForItem(item_name);
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i));
         }
@@ -111,6 +116,9 @@ public class clientApplication extends Application {
                 System.out.println(name + " " + amount);
                 String qi = name + " " + amount;
                 String reply = request1("add2cart", qi);
+                if(Integer.parseInt(reply) == -1){
+                    //pop up window
+                }
                 //addToCart(name, amount);
             }
         };
@@ -139,24 +147,25 @@ public class clientApplication extends Application {
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-
-        newWindow.show();
+        newWindow.showAndWait();
     }
 
-public void cartScreen() {
-        //ArrayList<item_qty> items = search();
-        String qi = Username;
-        ArrayList<item_qty> items = request1("search", qi);
+        public void cartScreen() {
+        String it = "";
+        ArrayList<String> items = request1("search",Username);
         for (int i = 0; i < items.size(); i++) {
-            System.out.println(items.get(i).name + " " + items.get(i).qty);
+            String[] item = items.get(i).split(",");
+            System.out.println(item[0] + " " + Float.parseFloat(item[1]));
+            it = it + items.get(i)+",";
         }
+        it = it + Username;
+        final String ite = it;
         EventHandler<javafx.scene.input.MouseEvent> purchas
                 = new EventHandler<javafx.scene.input.MouseEvent>() {
 
             @Override
             public void handle(javafx.scene.input.MouseEvent e) {
-                System.out.println("hi");
-                purchase(items);
+                request1("purchase",ite);
 
             }
         };
@@ -173,9 +182,10 @@ public void cartScreen() {
                 Node q = getNodeByRowColumnIndex(row, 1, grid);
                 Label l = (Label) n;
                 Button qty = (Button) q;
-                System.out.println("names"+l.getText() + " " + qty.getText());
+                System.out.println("names" + l.getText() + "," + qty.getText());
                 System.out.println("here");
-                remove(l.getText(), (int)Float.parseFloat(qty.getText()));
+                requestvoid("remove",l.getText()+","+(int) Float.parseFloat(qty.getText())+","+Username);
+                //remove(l.getText()+","+(int) Float.parseFloat(qty.getText())+","+"batoul");
                 System.out.println("here");
             }
         };
@@ -212,8 +222,10 @@ public void cartScreen() {
         grid.addRow(0, item, quantity);
         int i = 0;
         for (i = 0; i < items.size(); i++) {
-            Label l = new Label(items.get(i).name);
-            String amount = String.valueOf((int)Float.parseFloat(items.get(i).qty));
+            String[] nqty = items.get(i).split(",");
+            System.out.println(nqty[0] + " " + Float.parseFloat(nqty[1]));
+            Label l = new Label(nqty[0]);
+            String amount = String.valueOf((int) Float.parseFloat(nqty[1]));
             Button q = new Button(amount);
             Button e = new Button("edit");
             Button r = new Button("remove");
@@ -232,12 +244,11 @@ public void cartScreen() {
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-
-        newWindow.show();
+        newWindow.showAndWait();
     }
-
-    public void editScreen(String item_name) {
         
+    public void editScreen(String item_name) {
+
         Label q = new Label("quantity");
         Button ok = new Button("OK");
         ok.setOnAction(new EventHandler<ActionEvent>() {
@@ -245,33 +256,24 @@ public void cartScreen() {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub  
-                System.out.println(Integer.parseInt(qty.getText()) + " " + item_name);
-                String qi = Integer.parseInt(qty.getText()) + " " + item_name;
-                reply = request1("edit", qi);
-                //edit(Integer.parseInt(qty.getText()), item_name);
+                System.out.println(Integer.parseInt(qty.getText()) + "," + item_name+","+"batoul");
+                int reply = Integer.parseInt(request1(Integer.parseInt(qty.getText()) + "," + item_name+","+Username));
+                //edit(Integer.parseInt(qty.getText()) + "," + item_name+","+"batoul");
             }
         });
         VBox root = new VBox();
-        root.getChildren().addAll(q,qty, ok);
+        root.getChildren().addAll(q, qty, ok);
         Scene scene = new Scene(root, 600, 400);
         // New window (Stage)
         Stage newWindow = new Stage();
         newWindow.setTitle("Cart");
         newWindow.setScene(scene);
-        
 
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-
-        newWindow.show();
+        newWindow.showAndWait();
     }
-
-
-    String Password;
-    String mail;
-    LocalDate birth;
-    int Phone;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -279,215 +281,218 @@ public void cartScreen() {
 
     }
 
-    public void first_page(){
-        Stage stage=new Stage();
+    public void first_page() {
+        Stage stage = new Stage();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(20);
-        Button login=new Button("Login"); 
-        login.setOnMouseClicked((new EventHandler <MouseEvent>(){
+        Button login = new Button("Login");
+        login.setOnMouseClicked((new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 loginScreen();
-            }            
+            }
         }));
-        
-        Button signUp=new Button("Sign up");
-        signUp.setOnMouseClicked((new EventHandler <MouseEvent>(){
+
+        Button signUp = new Button("Sign up");
+        signUp.setOnMouseClicked((new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 signUpScreen();
-            }            
+            }
         }));
         vbox.setMargin(login, new Insets(5, 10, 10, 10));
-        vbox.setMargin(signUp, new Insets(10, 10, 10, 10)); 
-        Scene scene=new Scene(vbox,400,400);
-        ImageView i=new ImageView(icon());
-        i.setFitHeight(scene.getHeight()/3);
-        i.setFitWidth(scene.getWidth()/3);
-        vbox.setMargin(i, new Insets(10, 10, 10, 10)); 
-        vbox.getChildren().addAll(i,login,signUp);
+        vbox.setMargin(signUp, new Insets(10, 10, 10, 10));
+        Scene scene = new Scene(vbox, 400, 400);
+        ImageView i = new ImageView(icon());
+        i.setFitHeight(scene.getHeight() / 3);
+        i.setFitWidth(scene.getWidth() / 3);
+        vbox.setMargin(i, new Insets(10, 10, 10, 10));
+        vbox.getChildren().addAll(i, login, signUp);
         stage.getIcons().add(icon());
         stage.setTitle("Market");
         stage.setScene(scene);
         stage.show();
     }
-    public void invalidLogin(String msg) { 
+
+    public void invalidLogin(String msg) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("Failed login");
         alert.setHeaderText("Failed login");
-        alert.setContentText(msg);        
+        alert.setContentText(msg);
         alert.show();
     }
-    public void loginScreen(){
-        Stage login =new Stage();
-        VBox v=new VBox();
+
+    public void loginScreen() {
+        Stage login = new Stage();
+        VBox v = new VBox();
         v.setAlignment(Pos.CENTER);
-        Scene s=new Scene(v,300,300);
+        Scene s = new Scene(v, 300, 300);
         login.setScene(s);
         login.setTitle("Login screen");
         login.getIcons().add(icon());
-        HBox h1=new HBox(7);
+        HBox h1 = new HBox(7);
         h1.setAlignment(Pos.CENTER);
-        Label username=new Label("Username");
-        h1.setMargin(username,new Insets(10, 10, 10, 10));
-        TextField user=new TextField();
+        Label username = new Label("Username");
+        h1.setMargin(username, new Insets(10, 10, 10, 10));
+        TextField user = new TextField();
         //Username=user.getText();
-        h1.setMargin(user,new Insets(10, 10, 10, 10));
-        h1.getChildren().addAll(username,user);
-        HBox h2=new HBox(7);
+        h1.setMargin(user, new Insets(10, 10, 10, 10));
+        h1.getChildren().addAll(username, user);
+        HBox h2 = new HBox(7);
         h2.setAlignment(Pos.CENTER);
-        Label pass=new Label("Password");
-        h2.setMargin(pass,new Insets(10, 10, 10, 10));
-        TextField password=new TextField();
+        Label pass = new Label("Password");
+        h2.setMargin(pass, new Insets(10, 10, 10, 10));
+        TextField password = new TextField();
         //Password=password.getText();
-        h2.setMargin(password,new Insets(10, 10, 10, 10));
-        h2.getChildren().addAll(pass,password);
-        Button Login=new Button("Login");        
-        v.setMargin(Login,new Insets(10, 10, 10, 10));
-        Login.setOnMouseClicked((new EventHandler <MouseEvent>(){
+        h2.setMargin(password, new Insets(10, 10, 10, 10));
+        h2.getChildren().addAll(pass, password);
+        Button Login = new Button("Login");
+        v.setMargin(Login, new Insets(10, 10, 10, 10));
+        Login.setOnMouseClicked((new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                Username=user.getText();
-                Password=password.getText();                
+                Username = user.getText();
+                Password = password.getText();
                 System.out.println(Username);
                 System.out.println(Password);
-                String st=Username+","+Password;
-                String s=request1("login",st);
+                String st = Username + "," + Password;
+                String s = request1("login", st);
 //                String s=loginValidation(st);
-                if((s.compareToIgnoreCase("successful login"))==0) {
+                if ((s.compareToIgnoreCase("successful login")) == 0) {
                     login.close();
                     home_display();
-                    
-                }
-                else {
+
+                } else {
                     login.close();
                     invalidLogin(s);
-                    
+
                 }
-            }            
+            }
         }));
-        v.getChildren().addAll(h1,h2,Login);
-        
+        v.getChildren().addAll(h1, h2, Login);
+
         login.showAndWait();
     }
-    
-    public void signUpScreen(){
-        Stage signUp=new Stage();
-        VBox v=new VBox();
+
+    public void signUpScreen() {
+        Stage signUp = new Stage();
+        VBox v = new VBox();
         v.setAlignment(Pos.CENTER);
-        Scene s=new Scene(v,400,400);
+        Scene s = new Scene(v, 400, 400);
         signUp.setScene(s);
         signUp.setTitle("Sign up screen");
         signUp.getIcons().add(icon());
-        HBox h1=new HBox(7);
+        HBox h1 = new HBox(7);
         h1.setAlignment(Pos.CENTER);
-        Label email=new Label("     Email     ");
-        h1.setMargin(email,new Insets(10, 10, 10, 10));
-        TextField Email=new TextField();
-        h1.setMargin(Email,new Insets(10, 10, 10, 10));
-        h1.getChildren().addAll(email,Email);
-        HBox h2=new HBox(7);
+        Label email = new Label("     Email     ");
+        h1.setMargin(email, new Insets(10, 10, 10, 10));
+        TextField Email = new TextField();
+        h1.setMargin(Email, new Insets(10, 10, 10, 10));
+        h1.getChildren().addAll(email, Email);
+        HBox h2 = new HBox(7);
         h2.setAlignment(Pos.CENTER);
-        Label username=new Label("Username ");
-        h2.setMargin(username,new Insets(10, 10, 10, 10));
-        TextField user=new TextField();
-        h2.setMargin(user,new Insets(10, 10, 10, 10));
-        h2.getChildren().addAll(username,user);
-        HBox h3=new HBox(7);
+        Label username = new Label("Username ");
+        h2.setMargin(username, new Insets(10, 10, 10, 10));
+        TextField user = new TextField();
+        h2.setMargin(user, new Insets(10, 10, 10, 10));
+        h2.getChildren().addAll(username, user);
+        HBox h3 = new HBox(7);
         h3.setAlignment(Pos.CENTER);
-        Label pass=new Label("Password  ");
-        h3.setMargin(pass,new Insets(10, 10, 10, 10));
-        TextField password=new TextField();
-        h3.setMargin(password,new Insets(10, 10, 10, 10));
-        h3.getChildren().addAll(pass,password);
-        HBox h4=new HBox(7);
+        Label pass = new Label("Password  ");
+        h3.setMargin(pass, new Insets(10, 10, 10, 10));
+        TextField password = new TextField();
+        h3.setMargin(password, new Insets(10, 10, 10, 10));
+        h3.getChildren().addAll(pass, password);
+        HBox h4 = new HBox(7);
         h4.setAlignment(Pos.CENTER);
-        Label birthday=new Label("Birthday   ");
-        h4.setMargin(birthday,new Insets(10, 10, 10, 10));
-        TextField Birthday=new TextField();
-        h4.setMargin(Birthday,new Insets(10, 10, 10, 10));
-        h4.getChildren().addAll(birthday,Birthday);
-        HBox h5=new HBox(7);
+        Label birthday = new Label("Birthday   ");
+        h4.setMargin(birthday, new Insets(10, 10, 10, 10));
+        TextField Birthday = new TextField();
+        h4.setMargin(Birthday, new Insets(10, 10, 10, 10));
+        h4.getChildren().addAll(birthday, Birthday);
+        HBox h5 = new HBox(7);
         h5.setAlignment(Pos.CENTER);
-        Label telephone=new Label("Telephone");
-        h5.setMargin(telephone,new Insets(10, 10, 10, 10));
-        TextField phone=new TextField();
-        h5.setMargin(phone,new Insets(10, 10, 10, 10));
-        h5.getChildren().addAll(telephone,phone);
-        Button sign=new Button("Sign Up");
-        sign.setOnMouseClicked((new EventHandler <MouseEvent>(){
+        Label telephone = new Label("Telephone");
+        h5.setMargin(telephone, new Insets(10, 10, 10, 10));
+        TextField phone = new TextField();
+        h5.setMargin(phone, new Insets(10, 10, 10, 10));
+        h5.getChildren().addAll(telephone, phone);
+        Button sign = new Button("Sign Up");
+        sign.setOnMouseClicked((new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                Username=user.getText();
-                Password=password.getText();
-                birth=LocalDate.parse(Birthday.getText());
-                mail =Email.getText();
-                Phone=Integer.parseInt(phone.getText());
-                String s=Username+","+Password+","+mail+","+String.valueOf(birth)+","+String.valueOf(Phone);
+                Username = user.getText();
+                Password = password.getText();
+                birth = LocalDate.parse(Birthday.getText());
+                mail = Email.getText();
+                Phone = Integer.parseInt(phone.getText());
+                String s = Username + "," + Password + "," + mail + "," + String.valueOf(birth) + "," + String.valueOf(Phone);
                 //signUp_handler(s);
-                requestvoid("signup",s);
+                requestvoid("signup", s);
                 signUp.close();
                 //first_page();
-            }            
+            }
         }));
-        v.getChildren().addAll(h1,h2,h3,h4,h5,sign);
+        v.getChildren().addAll(h1, h2, h3, h4, h5, sign);
         signUp.showAndWait();
     }
-    public Image icon(){
-        String path="";
+
+    public Image icon() {
+        String path = "";
         try {
             String currentPath = new java.io.File(".").getCanonicalPath();
 
             System.out.println(currentPath);
-            char c='/';
-            for(int i=0;i<currentPath.length();i++){
-                if(currentPath.charAt(i)=='/') {
-                    c='/';
+            char c = '/';
+            for (int i = 0; i < currentPath.length(); i++) {
+                if (currentPath.charAt(i) == '/') {
+                    c = '/';
                     break;
+                } else if (currentPath.charAt(i) == '\\') {
+                    c = '\\';
                 }
-                else if(currentPath.charAt(i)=='\\'){
-                c='\\';
-            }
             }
 
-          path=currentPath+c+"market.jpg";
+            path = currentPath + c + "market.jpg";
 
-        
         } catch (Exception e) {
 
         }
-        Image logo=new Image(path);
+        Image logo = new Image(path);
         return logo;
-        
-    }
-    public ArrayList<String> parsing(String s) {
-        ArrayList<String> r = new ArrayList<String>();
-        int init = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if ((s.charAt(i) == ',')) {
 
-                r.add(s.substring(init, i));
-                init = i + 1;
-            }
-        }
-        r.add(s.substring(init));
-        return r;
     }
-    public ArrayList<String> parsing2(String s){
-        ArrayList<String>r=new ArrayList<String>();
-        int init=0;
-        for (int i=0;i<s.length();i++){
-            if((s.charAt(i)==':')) {
-                
-                r.add(s.substring(init,i));
-                init=i+1;
-            }
-        }
-        r.add(s.substring(init));
-        return r;
-    }
-    public void home_display()  {
+
+//    public ArrayList<String> parsing(String s) {
+//        ArrayList<String> r = new ArrayList<String>();
+//        int init = 0;
+//        for (int i = 0; i < s.length(); i++) {
+//            if ((s.charAt(i) == ',')) {
+//
+//                r.add(s.substring(init, i));
+//                init = i + 1;
+//            }
+//        }
+//        r.add(s.substring(init));
+//        return r;
+//    }
+
+//    public ArrayList<String> parsing2(String s) {
+//        ArrayList<String> r = new ArrayList<String>();
+//        int init = 0;
+//        for (int i = 0; i < s.length(); i++) {
+//            if ((s.charAt(i) == ':')) {
+//
+//                r.add(s.substring(init, i));
+//                init = i + 1;
+//            }
+//        }
+//        r.add(s.substring(init));
+//        return r;
+//    }
+
+    public void home_display() {
         Stage window = new Stage();
         //window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -504,11 +509,10 @@ public void cartScreen() {
         Button accountInfo = new Button("Account Information");
         Button logOut = new Button("Log Out");
 //vBox.getChildren().addAll(history, cash, c, search,s, accountInfo, logOut);
-        vBox.getChildren().addAll(history, cash, c, search,s, accountInfo,deposit,logOut);
+        vBox.getChildren().addAll(history, cash, c, search, s, accountInfo, deposit, logOut);
         //Username
 
         layout.getChildren().add(vBox);
-
 
         Scene scene = new Scene(layout, 400, 400);
 
@@ -523,8 +527,7 @@ public void cartScreen() {
                 }
             }
 
-        }
-        ));
+        }));
         history.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 try {
@@ -535,8 +538,7 @@ public void cartScreen() {
                 }
             }
 
-        }
-        ));
+        }));
 
         accountInfo.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -547,9 +549,7 @@ public void cartScreen() {
                 }
             }
 
-        }
-        ));
-
+        }));
 
         deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -560,8 +560,7 @@ public void cartScreen() {
                 }
             }
 
-        }
-        ));
+        }));
 
         EventHandler<javafx.scene.input.MouseEvent> logout
                 = new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -596,7 +595,7 @@ public void cartScreen() {
 
     }
 
-    public  void cash_display(String s) {
+    public void cash_display(String s) {
         Stage window = new Stage();
         window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -611,7 +610,7 @@ public void cartScreen() {
         window.showAndWait();
     }
 
-    public  void history_display(String s) {
+    public void history_display(String s) {
         Stage window = new Stage();
         window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -626,7 +625,7 @@ public void cartScreen() {
 
     }
 
-    public  void account_display(String s) {
+    public void account_display(String s) {
         Stage window = new Stage();
         window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -640,7 +639,8 @@ public void cartScreen() {
         window.showAndWait();
 
     }
-    public  void deposit_dislay() {
+
+    public void deposit_dislay() {
         Stage window = new Stage();
         window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -653,7 +653,6 @@ public void cartScreen() {
         layout.getChildren().add(vBox);
         Scene scene;
         window.setTitle("Depisit");
-
 
         scene = new Scene(layout, 400, 400);
 
@@ -674,11 +673,11 @@ public void cartScreen() {
                 }
             }
 
-        }
-        ));
+        }));
         window.showAndWait();
     }
-    public  void valid_deposit_display() {
+
+    public void valid_deposit_display() {
 
         Stage window = new Stage();
         window.getIcons().add(icon());
@@ -693,7 +692,8 @@ public void cartScreen() {
         window.setScene(scene);
         window.showAndWait();
     }
-    public  void invalid_deposit_display() {
+
+    public void invalid_deposit_display() {
         Stage window = new Stage();
         window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -707,41 +707,42 @@ public void cartScreen() {
         window.setScene(scene);
         window.showAndWait();
     }
-    public String cash_server(){
+
+    public String cash_server() {
         String responce = new String();
 
         return responce;
     }
 
-    public String history_server(){
+    public String history_server() {
         String result = new String("Item name:price:date\n");
         ArrayList<String> responce = new ArrayList<String>();
         int history_items = responce.size();
-        for(int i = 0; i < history_items; i++){
-            result+=responce.get(i)+"\n";
+        for (int i = 0; i < history_items; i++) {
+            result += responce.get(i) + "\n";
         }
         return result;
     }
-    public String account_server(){
+
+    public String account_server() {
         String result = new String();
         ArrayList<String> responce = new ArrayList<String>();
         int account_items = responce.size();
-        for(int i = 0; i < account_items; i++){
-            result+="Username: "+ parsing2(responce.get(i)).get(0) +"\n";
-            result+="Password: "+parsing2(responce.get(i)).get(1)+"\n";
-            result+="Mail: "+parsing2(responce.get(i)).get(2)+"\n";
-            result+="Birthday: "+parsing2(responce.get(i)).get(3)+"\n";
-            result+="Telephone: "+parsing2(responce.get(i)).get(4)+"\n";
+        for (int i = 0; i < account_items; i++) {
+            result += "Username: " + parsing2(responce.get(i)).get(0) + "\n";
+            result += "Password: " + parsing2(responce.get(i)).get(1) + "\n";
+            result += "Mail: " + parsing2(responce.get(i)).get(2) + "\n";
+            result += "Birthday: " + parsing2(responce.get(i)).get(3) + "\n";
+            result += "Telephone: " + parsing2(responce.get(i)).get(4) + "\n";
 
         }
         return result;
     }
-    public void deposit_server(float amount){
+
+    public void deposit_server(float amount) {
         String responce = new String();
 
     }
-
-
 
     public static void main(String[] args) {
         launch();
