@@ -694,20 +694,16 @@ public class serverApplication extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
             Statement stmt = con.createStatement();
-            String text1= "SELECT Name FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
+            String text1= "SELECT Name,price,date_time FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
                     "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name "
                     ;
-            String text2= "SELECT price FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name ";
-            String text3= "SELECT date_time FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name ";
+
 
             ResultSet rs1 = stmt.executeQuery(text1);
-            ResultSet rs2 = stmt.executeQuery(text2);
-            ResultSet rs3 = stmt.executeQuery(text3);
+
             while (rs1.next()) {
                 String tempstr = "";
-                tempstr += rs1.getString(1) + ":"+String.valueOf(rs2.getFloat(1))+":"+String.valueOf(rs3.getDate(1));
+                tempstr += rs1.getString(1) + ":"+String.valueOf(rs1.getFloat(2))+":"+String.valueOf(rs1.getDate(3));
                 temp.add(tempstr);
             }
             con.close();
@@ -716,42 +712,68 @@ public class serverApplication extends Application {
         }
         return temp;
     }
-
     public ArrayList<String> accountInfo(String user_name) {
-        ArrayList<String> temp = new ArrayList<String>();
+         ArrayList<String> temp = new ArrayList<String>();
+        String tempstr = "";
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
+            Connection con1 = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
-            Statement stmt = con.createStatement();
-            String text1= "SELECT Username From login_signup where login_signup.Username = \"" +user_name+"\""
-                    ;
-            String text2= "SELECT Password From login_signup where login_signup.Username = \"" +user_name+"\""
-                    ;
-            String text3= "SELECT mail From login_signup where login_signup.Username = \"" +user_name+"\""
-                    ;
-            String text4= "SELECT birthday From login_signup where login_signup.Username = \"" +user_name+"\""
-                    ;
-            String text5= "SELECT telephone From login_signup where login_signup.Username = \"" +user_name+"\""
-                    ;
-            ResultSet rs1 = stmt.executeQuery(text1);
-            ResultSet rs2 = stmt.executeQuery(text2);
-            ResultSet rs3 = stmt.executeQuery(text3);
-            ResultSet rs4 = stmt.executeQuery(text4);
-            ResultSet rs5 = stmt.executeQuery(text5);
+
+            Statement stmt1 = con1.createStatement();
+            String text1= "SELECT * From login_signup1 where login_signup1.Username = \"" +user_name+"\"";
+
+            ResultSet rs1 = stmt1.executeQuery(text1);
             while (rs1.next()) {
-                String tempstr = "";
-                tempstr += rs1.getString(1) + ":"+rs2.getString(1) +":"+rs3.getString(1)+":"+String.valueOf(rs4.getDate(1))
-                +":"+String.valueOf(rs5.getInt(1));
+
+                tempstr += rs1.getString(1)+":"+rs1.getString(2)+":"+rs1.getString(3)+":"+rs1.getString(4)+":"+rs1.getString(5);
                 temp.add(tempstr);
             }
-            con.close();
-
+            con1.close();
         } catch (Exception e) {
             System.out.println(e);
         }
         return temp;
     }
+//    public ArrayList<String> accountInfo(String user_name) {
+//        ArrayList<String> temp = new ArrayList<String>();
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con1 = DriverManager.getConnection(
+//                    "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
+//
+//            String text1= "SELECT Username From login_signup where login_signup.Username = \"" +user_name+"\";SELECT Password From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\"" +
+//                    ";SELECT mail From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";SELECT birthday From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";" +
+//                    "SELECT telephone From login_signup where login_signup.Username = \\\"\" +user_name+\"\\\";";
+//                    ;
+//            String text2= "SELECT Password From login_signup where login_signup.Username = \"" +user_name+"\""
+//                    ;
+//            String text3= "SELECT mail From login_signup where login_signup.Username = \"" +user_name+"\""
+//                    ;
+//            String text4= "SELECT birthday From login_signup where login_signup.Username = \"" +user_name+"\""
+//                    ;
+//            String text5= "SELECT telephone From login_signup where login_signup.Username = \"" +user_name+"\""
+//                    ;
+//            ResultSet rs1 = stmt1.executeQuery(text1);
+//            ResultSet rs2 = stmt2.executeQuery(text2);
+//            ResultSet rs3 = stmt3.executeQuery(text3);
+//            ResultSet rs4 = stmt4.executeQuery(text4);
+//            ResultSet rs5 = stmt5.executeQuery(text5);
+//            while (rs1.next()) {
+//                String tempstr = "";
+//                tempstr += rs1.getString(1) + ":" + rs2.getString(1) + ":" + rs3.getString(1) + ":" + String.valueOf(rs4.getDate(1))
+//                        + ":" + String.valueOf(rs5.getInt(1));
+//                temp.add(tempstr);
+//            }
+//
+//            con1.close();
+//
+//
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return temp;
+//    }
 
     public void deposit(String par) {
         float tempfloat = 0;
