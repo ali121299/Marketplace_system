@@ -767,7 +767,123 @@ public class serverApplication extends Application {
         }
 
     }
+    
 
 
  
 }
+/////////////////////////////////////mariamwaleed
+public class ServerThread extends Thread {
+    ///////////////////////////////////////////////////global variables////////////////////////////////////////
+    public  Socket clientSocket;
+     public static String send=null;
+   public static ArrayList<String> searchitem;
+//  public static ArrayList<item_qty> s = new ArrayList<item_qty>();
+   public static  ArrayList<String> cart;
+   public static String DB="Market_ONLINE";
+   public static String DB_password="Mariam2018";
+   public static String connector="com.mysql.cj.jdbc.Driver";
+
+ public ServerThread(Socket socket)
+   {this.clientSocket=socket;}
+       
+    @Override 
+        public void run(){
+    
+    
+    
+    try{
+        PrintWriter pw = new PrintWriter(clientSocket.getOutputStream(),true);
+        InputStreamReader isr=new InputStreamReader(clientSocket.getInputStream());//opening the input stream
+        BufferedReader ser_receive=new BufferedReader(isr);
+        String receive= null; String tst=null;String [] yrb;String sendtoclient=null;
+        while(true){
+        if((receive=ser_receive.readLine())!=null){
+        System.out.println("client : "+receive);
+        tst= receive;
+        yrb= tst.split(";");
+        for(int i=0;i<yrb.length;i++){
+            System.out.println(yrb[i]);
+        }
+        ////////// Cases ///////////
+        if(yrb[0].equals("login")){
+        sendtoclient=loginValidation(yrb[1]);
+        send=sendtoclient;
+        }
+        else if(yrb[0].equals("signup")){
+       
+        signUp_handler(yrb[1]);
+        
+        }
+        else if(yrb[0].equals("search4item")){
+         searchitem=searchForItem(yrb[1]);
+            
+            send=searchitem.toString();
+        }
+        else if(yrb[0].equals("edit")){
+            String edit=String.valueOf(edit(yrb[1]));
+       
+          send=edit;
+        
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        else if(yrb[0].equals("search")){
+            cart=search(yrb[1]);
+            send=cart.toString();
+            
+        }
+        else if (yrb[0].equals("purchase")){
+         String purchase=String.valueOf(purchase(yrb[1]));
+     
+          send=purchase;
+//              System.out.println("hhhhhhhhhhhhhhhhhhhhhh");
+        }
+        else if(yrb[0].equals("remove")){
+        remove(yrb[1]);
+        
+        }
+        else if(yrb[0].equals("add2cart")){
+        String add2cart=String.valueOf(addTocart(yrb[1]));
+     
+          send=add2cart;
+        }
+        else if(yrb[0].equals("account")){
+        
+         cart=accountInfo(yrb[1]);
+            send=cart.toString();
+        }
+        else if(yrb[0].equals("deposit")){
+          deposit(yrb[1]);
+        }
+        else if(yrb[0].equals("history")){
+        cart=history(yrb[1]);
+            send=cart.toString();
+        }
+        else if(yrb[0].equals("cash")){
+        String cash=String.valueOf(cashFunc(yrb[1]));
+     
+          send=cash;
+        }
+        }
+       
+       
+
+       
+  
+//        if(send.equals("bye")){
+//        System.exit(0);
+//        }
+ pw.println(send);
+ pw.close();
+        }
+//        System.out.println(send);
+//        pw.println(send);
+    }
+        catch(Exception e){}
+    
+    
+
+//    public ServerThread(Socket socket) {
+//    }
+    
+}}
