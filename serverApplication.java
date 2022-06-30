@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.io.BufferedReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +9,10 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,6 +42,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class serverApplication extends Application {
@@ -771,3 +779,129 @@ public class serverApplication extends Application {
 
  
 }
+
+
+class Server {
+
+    public static void main(String[] args)
+    {
+        ServerSocket server = null;
+  
+        try {
+  
+            // server is listening on port 1234
+            server = new ServerSocket(8080);
+            server.setReuseAddress(true);
+  
+            // running infinite loop for getting
+            // client request
+            while (true) {
+  
+                // socket object to receive incoming client
+                // requests
+                Socket client = server.accept();
+  
+                // Displaying that new client is connected
+                // to server
+                System.out.println("New client connected"
+                                   + client.getInetAddress()
+                                         .getHostAddress());
+  
+                // create a new thread object
+                ClientHandler clientSock
+                    = new ClientHandler(client);
+  
+                // This thread will handle the client
+                // separately
+                new Thread(clientSock).start();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (server != null) {
+                try {
+                    server.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    
+    
+  
+    // ClientHandler class
+    private static class ClientHandler implements Runnable {
+        private final Socket clientSocket;
+        int value = 0;
+        // Constructor
+        public ClientHandler(Socket socket)
+        {
+            this.clientSocket = socket;
+        }
+  
+        public synchronized void update(int x){
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.value = x;
+        }
+        
+        public void run()
+        {
+            PrintWriter out = null;
+            BufferedReader in = null;
+            try {
+                    
+                  // get the outputstream of client
+                out = new PrintWriter(
+                    clientSocket.getOutputStream(), true);
+  
+                  // get the inputstream of client
+                in = new BufferedReader(
+                    new InputStreamReader(
+                        clientSocket.getInputStream()));
+  
+                String line;
+                while ((line = in.readLine()) != null) {
+  
+                    // writing the received message from
+                    // client
+                    System.out.printf(
+                        " Sent from the client: %s\n",
+                        line);
+                    out.println(line);
+                    int num = Integer.parseInt(line);
+                    this.update(num);
+                    System.out.printf(
+                        "new value is: %s\n",
+                        this.value);
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (in != null) {
+                        in.close();
+                        clientSocket.close();
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
