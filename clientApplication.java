@@ -708,14 +708,17 @@ public void cartScreen() {
         window.showAndWait();
     }
     public String cash_server(){
-        String responce = new String();
-
+        String responce = request1("cash",Username);
         return responce;
     }
 
     public String history_server(){
         String result = new String("Item name:price:date\n");
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("history",Username);
+        String s2 = removebrackets(s);
+        responce = parsing(s2);
+
         int history_items = responce.size();
         for(int i = 0; i < history_items; i++){
             result+=responce.get(i)+"\n";
@@ -725,6 +728,9 @@ public void cartScreen() {
     public String account_server(){
         String result = new String();
         ArrayList<String> responce = new ArrayList<String>();
+        String s = request1("account",Username);
+        String s2 = removebrackets(s);
+        responce = parsing(s2);
         int account_items = responce.size();
         for(int i = 0; i < account_items; i++){
             result+="Username: "+ parsing2(responce.get(i)).get(0) +"\n";
@@ -737,7 +743,7 @@ public void cartScreen() {
         return result;
     }
     public void deposit_server(float amount){
-        String responce = new String();
+        requestvoid("deposit",Username+","+String.valueOf(amount));
 
     }
 
