@@ -51,7 +51,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
-
+import java.net.*;
+import java.io.*;
 import java.util.ArrayList;
 
 public class clientApplication extends Application {
@@ -758,4 +759,62 @@ public class clientApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
+     public static Socket socket=null;
+    ////////////////////////////////////////////MERGE/////////////////////////////////////
+     public static String merge (String s1,String s2){
+        return s1+";"+s2;
+    }
+     /////////////////////////////////////////////////request1/////////////////////////////////
+     public static String request1(String s1,String s2) throws IOException{
+        String send,receive=null;
+        try{
+        String server_send=merge(s1,s2);
+        socket=new Socket("localhost",333);
+        System.out.println(".....................now you can start chat ...................");
+//        BufferedReader keyr=new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
+        //client reading the message from server through it's inputstream
+        InputStreamReader isr=new InputStreamReader(socket.getInputStream());//opening the input stream
+        BufferedReader ser_receive=new BufferedReader(isr);
+        
+       
+        while(true){
+//        send=keyr.readLine();
+          send=server_send;
+        pw.println(send);
+      
+        if((receive=ser_receive.readLine())!=null){
+        System.out.println("server : "+receive);
+        
+        }
+        
+        }
+        
+        }
+        catch(Exception e){}
+        socket.close();
+        return receive;
+    }
+////////////////////////////////////////////////////////////////////requestvoid////////////////////////////
+     public static void requestvoid(String s1,String s2) throws IOException{
+     String send=null;
+        try{
+        String server_send=merge(s1,s2);
+       Socket socket=new Socket("localhost",333);
+        System.out.println(".....................now you can start chat ...................");
+
+        PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
+        //client reading the message from server through it's inputstream
+       
+        while(true){
+
+          send=server_send;
+        pw.println(send);
+      
+        }
+        
+        }
+        catch(Exception e){}
+      socket.close();
+     }
 }
