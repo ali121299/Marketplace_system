@@ -1,4 +1,8 @@
-package com.example.demo;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package newserver;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,20 +41,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import static javafx.application.Application.launch;
 
-
-public class Server extends Application {
+ public class marketserver extends Application {
 
 
     TextField search = new TextField();
-    String Username;
-    String DB;
-    String DB_password;
+    public static String Username;
+    public static String DB="Marketplace_System";
+    public static String DB_password="Sonsuza kadar";
+    public static String connector="com.mysql.jdbc.Driver";
     GridPane grid = new GridPane();
     GridPane root = new GridPane();
     TextField qty = new TextField();
 
-    String Password;
+    public static String Password;
 
 
     class item_qty {
@@ -64,7 +72,7 @@ public class Server extends Application {
         }
     }
 
-    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
+    private static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         Node result = null;
         ObservableList<Node> childrens = gridPane.getChildren();
 
@@ -77,40 +85,49 @@ public class Server extends Application {
 
         return result;
     }
-
-    public int purchase(String message) {
-        String[] arrOfStr = message.split(",");
-        ArrayList<String> s = new ArrayList<String>();
-        String name = "";
-        for (int i = 0; i < arrOfStr.length-1; i++) {
-            //System.out.println(arrOfStr[i]);
-            if (i % 2 == 0) {
-                name = arrOfStr[i];
-            } else {
-                name = name+","+ arrOfStr[i];
-                s.add(name);
-                name ="";
-
-            }
-        }
-        return purchase(s, arrOfStr[arrOfStr.length - 1]);
+    public static void main(String[] args) throws IOException {
+        
+        new serverfinalfinal().start();
+        launch();
+        
+   
+         
     }
 
-    public int purchase(ArrayList<String> items, String Username) {
+
+ public static int purchase(String Username) {
+        ArrayList<String[]> items = new ArrayList<String[]>();
+        //get items in cart
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select item_name, Amount from cart Where username = '" + Username + "'");
+            while (rs.next()) {
+                System.out.println(rs.getString(1) + " " + rs.getString(2));
+                String[] a = {rs.getString(1), rs.getString(2)};
+                items.add(a);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         float total_price = 0;
         //get total price
         for (int i = 0; i < items.size(); i++) {
-            String[] a = items.get(i).split(",");
-            System.out.println(a[0] + " " + Float.parseFloat(a[1]));
+            System.out.println("price:" + items.get(i)[0] + " " + Float.parseFloat(items.get(i)[1]));
+            String item_name = items.get(i)[0];
+            float am = Float.parseFloat(items.get(i)[1]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + a[0] + "'");
+                ResultSet rs = stmt.executeQuery("select Price from items Where Name = '" + item_name + "'");
                 while (rs.next()) {
                     System.out.println(rs.getString(1));
-                    total_price = total_price + (Float.parseFloat(rs.getString(1)) * Float.parseFloat(a[1]));
+                    total_price = total_price + (Float.parseFloat(rs.getString(1)) * am);
                 }
                 con.close();
             } catch (Exception e) {
@@ -125,7 +142,6 @@ public class Server extends Application {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
-//here sonoo is database name, root is username and password  
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select Current_balance from Account Where Username = '" + Username + "'");
             while (rs.next()) {
@@ -184,12 +200,14 @@ public class Server extends Application {
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             for (int i = 0; i < items.size(); i++) {
-                String[] a = items.get(i).split(",");
-                System.out.println(a[0] + " " + Float.parseFloat(a[1]));
+                //String[] a = items.get(i).split(",");
+                String item_name = items.get(i)[0];
+                float am = Float.parseFloat(items.get(i)[1]);
+                System.out.println("orderspecs:"+ item_name + " " + am);
                 PreparedStatement stmt = con.prepareStatement("insert into Orderitems values(?,?,?)");
                 stmt.setInt(1, OID);
-                stmt.setString(2, a[0]);
-                stmt.setFloat(3, Float.parseFloat(a[1]));
+                stmt.setString(2, item_name);
+                stmt.setFloat(3, am);
                 stmt.executeUpdate();
             }
             con.close();
@@ -231,13 +249,13 @@ public class Server extends Application {
             System.out.println(e);
         }
         System.out.println("finish cart");
-         //update market
+        //update market
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
             Statement stmt = con.createStatement();
-            String query = "UPDATE Market SET cash = cash + "+total_price+ "WHERE market_id = 1";
+            String query = "UPDATE Market SET cash = cash + " + total_price + "WHERE MarketID = 1";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             //preparedStmt.setFloat(1, new_cash);
             preparedStmt.executeUpdate();
@@ -249,7 +267,7 @@ public class Server extends Application {
         return 1;
     }
 
-    public int edit(String message) {
+    public static int edit(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[0]);
         String item_name = arrOfStr[1];
@@ -258,7 +276,7 @@ public class Server extends Application {
         return edit(qty, item_name, Username);
     }
     //edit cart
-    public int edit(int qty, String item_name,String Username) {
+    public static int edit(int qty, String item_name,String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -302,7 +320,7 @@ public class Server extends Application {
     }
 
     //use search to get the items in cart of certain Username
-    public ArrayList<String> search(String Username) {
+    public static ArrayList<String> search(String Username) {
         ArrayList<String> items = new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -323,7 +341,7 @@ public class Server extends Application {
     }
 
     //search for certain item in certain category
-    public ArrayList<String> searchForItem(String text) {
+    public static ArrayList<String> searchForItem(String text) {
         ArrayList<String> items = new ArrayList<String>();
         String[] s = name_cat(text);
         String item_name = s[0];
@@ -348,12 +366,12 @@ public class Server extends Application {
         return items;
     }
 
-    private String[] name_cat(String text) {
+    private static String[] name_cat(String text) {
         String[] s = text.split(",");
         return s;
     }
 
-    public int addTocart(String message) {
+    public static int addTocart(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[1]);
         String item_name = arrOfStr[0];
@@ -361,7 +379,7 @@ public class Server extends Application {
     }
 
     //add item to user cart
-    public int addToCart(String item_name, int qty) {
+    public static int addToCart(String item_name, int qty) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -394,7 +412,7 @@ public class Server extends Application {
         return 1;
     }
 
-    public void remove(String message) {
+    public static void remove(String message) {
         String[] arrOfStr = message.split(",");
         String item_name = arrOfStr[0];
         int qty = Integer.parseInt(arrOfStr[1]);
@@ -403,7 +421,7 @@ public class Server extends Application {
     }
 
     //remove item from user cart
-    public void remove(String item_name, int qty, String Username) {
+    public static void remove(String item_name, int qty, String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -513,7 +531,7 @@ public class Server extends Application {
         
         stage.showAndWait();
     }
-    public ArrayList<String> Names(){
+    public static ArrayList<String> Names(){
         ArrayList<String> r=new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -530,7 +548,7 @@ public class Server extends Application {
         } 
         return r;
     }
-    public ArrayList<Float> cash(){
+    public static ArrayList<Float> cash(){
         ArrayList<Float> r=new ArrayList<Float>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -547,7 +565,7 @@ public class Server extends Application {
         } 
         return r;
     }
-    public double no_of_clients(){
+    public static double no_of_clients(){
         double r=0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -564,7 +582,7 @@ public class Server extends Application {
         } 
         return r;
     }
-    public String loginValidation(String st){
+    public static String loginValidation(String st){
         ArrayList <String>pa =parsing(st);
         String user=pa.get(0);
         String password=pa.get(1);
@@ -602,7 +620,7 @@ public class Server extends Application {
         return s;
   
     }
-    public void signUp_handler(String s){
+    public static void signUp_handler(String s){
         ArrayList <String>pa =parsing(s);
         String name=pa.get(0);
         String pass=pa.get(1);
@@ -624,7 +642,7 @@ public class Server extends Application {
 
     }
 
-    public ArrayList<String> parsing(String s){
+    public static ArrayList<String> parsing(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
         for (int i=0;i<s.length();i++){
@@ -637,7 +655,7 @@ public class Server extends Application {
         r.add(s.substring(init));
         return r;
     }
-    public Image icon(){
+    public static Image icon(){
         String path="";
         try {
             String currentPath = new java.io.File(".").getCanonicalPath();
@@ -666,13 +684,35 @@ public class Server extends Application {
     }
 
 
-    public static void main(String[] args) {
-        launch();
+public static ArrayList<String>  history(String user_name) {
+    ArrayList<String> temp = new ArrayList<String>();
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
+        Statement stmt = con.createStatement();
+        String text1= "SELECT orderitems.OID,Item_name,totalprice,amount,date_time FROM account,orderspecs,orderitems WHERE account.Username =  orderspecs.Client_name " +
+                "AND orderspecs.OID = orderitems.OID AND  account.Username = \""+user_name+"\" "
+                ;
+        ResultSet rs1 = stmt.executeQuery(text1);
+        while (rs1.next()) {
+            String tempstr = "";
+            tempstr += String.valueOf(rs1.getInt(1))+" : "+rs1.getString(2) + " : "+String.valueOf(rs1.getFloat(3))+" : "+String.valueOf(rs1.getFloat(4))+" : "+String.valueOf(rs1.getDate(5));
+            temp.add(tempstr);
+        }
+        con.close();
+    } catch (Exception e) {
+        System.out.println(e);
     }
+    return temp;
+}
+
+
+   
 
 
 
-    public  String cashFunc(String user_name)  {
+    public static String cashFunc(String user_name)  {
         float temp=0;
         try {
 
@@ -693,32 +733,8 @@ public class Server extends Application {
         return String.valueOf(temp);
     }
 
-        public ArrayList<String> history(String user_name) {
-        ArrayList<String> temp = new ArrayList<String>();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
-            Statement stmt = con.createStatement();
-            String text1= "SELECT Name,price,date_time FROM account,orderspecs,items,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                    "AND orderspecs.OID = orderitems.OID AND account.Username = \""+user_name+"\" AND orderitems.Item_name = items.Name "
-                    ;
-
-
-            ResultSet rs1 = stmt.executeQuery(text1);
-
-            while (rs1.next()) {
-                String tempstr = "";
-                tempstr += rs1.getString(1) + ":"+String.valueOf(rs1.getFloat(2))+":"+String.valueOf(rs1.getDate(3));
-                temp.add(tempstr);
-            }
-            con.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return temp;
-    }
-    public ArrayList<String> accountInfo(String user_name) {
+   
+    public static ArrayList<String> accountInfo(String user_name) {
          ArrayList<String> temp = new ArrayList<String>();
         String tempstr = "";
         try {
@@ -741,11 +757,11 @@ public class Server extends Application {
         }
         return temp;
     }
-    public void deposit(String par) {
+    public static void deposit(String par) {
         float tempfloat = 0;
         try {
 
-            ArrayList<String> temp = new ArrayList<String>();
+             ArrayList<String> temp = new ArrayList<String>();
             temp = parsing(par);
             String user_name = temp.get(0);
             float amount = Float.parseFloat(temp.get(1));
@@ -767,10 +783,13 @@ public class Server extends Application {
         }
 
     }
-}
+    
 
-/////////////////////////////////////mariamwaleed
-public class ServerThread extends Thread {
+
+ 
+}
+/////////////////////////////////////mariamwaleed///////////////////////////////////////
+ class ServerThread extends Thread {
     ///////////////////////////////////////////////////global variables////////////////////////////////////////
     public  Socket clientSocket;
      public static String send=null;
@@ -804,60 +823,60 @@ public class ServerThread extends Thread {
         }
         ////////// Cases ///////////
         if(yrb[0].equals("login")){
-        sendtoclient=loginValidation(yrb[1]);
+        sendtoclient=marketserver.loginValidation(yrb[1]);
         send=sendtoclient;
         }
         else if(yrb[0].equals("signup")){
        
-        signUp_handler(yrb[1]);
+        marketserver.signUp_handler(yrb[1]);
         
         }
         else if(yrb[0].equals("search4item")){
-         searchitem=searchForItem(yrb[1]);
+         searchitem=marketserver.searchForItem(yrb[1]);
             
             send=searchitem.toString();
         }
         else if(yrb[0].equals("edit")){
-            String edit=String.valueOf(edit(yrb[1]));
+            String edit=String.valueOf(marketserver.edit(yrb[1]));
        
           send=edit;
         
         }
         /////////////////////////////////////////////////////////////////////////////////////
         else if(yrb[0].equals("search")){
-            cart=search(yrb[1]);
+            cart=marketserver.search(yrb[1]);
             send=cart.toString();
             
         }
         else if (yrb[0].equals("purchase")){
-         String purchase=String.valueOf(purchase(yrb[1]));
+         String purchase=String.valueOf(marketserver.purchase(yrb[1]));
      
           send=purchase;
 //              System.out.println("hhhhhhhhhhhhhhhhhhhhhh");
         }
         else if(yrb[0].equals("remove")){
-        remove(yrb[1]);
+        marketserver.remove(yrb[1]);
         
         }
         else if(yrb[0].equals("add2cart")){
-        String add2cart=String.valueOf(addTocart(yrb[1]));
+        String add2cart=String.valueOf(marketserver.addTocart(yrb[1]));
      
           send=add2cart;
         }
         else if(yrb[0].equals("account")){
         
-         cart=accountInfo(yrb[1]);
+         cart=marketserver.accountInfo(yrb[1]);
             send=cart.toString();
         }
         else if(yrb[0].equals("deposit")){
-          deposit(yrb[1]);
+          marketserver.deposit(yrb[1]);
         }
         else if(yrb[0].equals("history")){
-        cart=history(yrb[1]);
+        cart=marketserver.history(yrb[1]);
             send=cart.toString();
         }
         else if(yrb[0].equals("cash")){
-        String cash=String.valueOf(cashFunc(yrb[1]));
+        String cash=String.valueOf(marketserver.cashFunc(yrb[1]));
      
           send=cash;
         }
@@ -896,8 +915,11 @@ class Finalserver {
      */
     
     public Finalserver() throws IOException{
+      
        ss=new ServerSocket(333) ;
+       
         System.out.println("waiting for a client");
+        
         while (true) {
             socket=ss.accept();
             System.out.println("connected");
@@ -906,9 +928,6 @@ class Finalserver {
     
     }}
     
-    public static void main(String[] args) throws IOException {
-        // TODO code application logic here
-         Finalserver server=new Finalserver();
-    }
+    
     
 }
