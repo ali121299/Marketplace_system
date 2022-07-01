@@ -113,6 +113,10 @@ public class Client extends Application {
     int Phone;
     static String Server;
 
+ArrayList<String> items = new ArrayList<String>();
+
+
+
     class item_qty {
 
         String name;
@@ -143,6 +147,33 @@ public class Client extends Application {
         alert.setHeaderText("warning");
         alert.setContentText(msg);
         alert.show();
+    }
+     
+     public void itemsScreen() {
+        System.out.println(items);
+        ScrollPane layout = new ScrollPane();
+        VBox bv=new VBox();
+        bv.setAlignment(Pos.CENTER);
+        bv.setMargin(root,new Insets(10, 10, 10, 10));
+        bv.getChildren().add(root);
+        GridPane root = new GridPane();
+        root.setVgap(10);
+        root.setHgap(10);
+        root.setAlignment(Pos.CENTER);
+        //root.addRow(0, name, price);
+        for (int i = 0; i < items.size(); i += 2) {
+            Label first_name = new Label(items.get(i));
+            Button b = new Button(items.get(i + 1));
+            root.addRow(i + 1, first_name, b);
+        }
+        layout.setContent(root);
+        layout.setLayoutX(10);
+        layout.setLayoutY(10);
+        Scene scene = new Scene(layout, 400, 200);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+
     }
 
      public void search(String item_name) throws IOException {
@@ -626,10 +657,24 @@ public class Client extends Application {
 //        Button search = new Button("Search");
         Button s = new Button("Go");
         Button accountInfo = new Button("Account Information");
+        Button show_items = new Button("show items");
         Button logOut = new Button("Log Out");
 //vBox.getChildren().addAll(history, cash, c, search,s, accountInfo, logOut);
-        vBox.getChildren().addAll(history, cash, c, search, s, accountInfo, deposit, logOut);
+        vBox.getChildren().addAll(history, cash, c, search, s, accountInfo, deposit,show_items, logOut);
         //Username
+        show_items.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                try {
+                    String reply = request1("items", "chicken");
+                    parsing3(reply);
+                    itemsScreen();
+                } catch (Exception er1) {
+                    er1.printStackTrace();
+
+                }
+            }
+
+        }));
 
         layout.getChildren().add(vBox);
 
@@ -721,6 +766,23 @@ public class Client extends Application {
         s.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, searching);
         window.show();
 
+    }
+    public void parsing3(String str) {
+        System.out.println("parse");
+        System.out.println(str);
+        System.out.println("len" + str.length());
+        String str2 = "";
+        for (int i = 0; i < str.length() - 1; i++) {
+            str2 += str.charAt(i);
+            if (str.charAt(i + 1) == ',') {
+                System.out.println(str2);
+                items.add(str2);
+                str2 = "";
+                i++;
+            }
+
+        }
+        System.out.println(items.size());
     }
 
     public void cash_display(String s) {
@@ -924,4 +986,3 @@ public String history_server() throws IOException {
     }
 
 }
-
