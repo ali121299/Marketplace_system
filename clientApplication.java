@@ -1,4 +1,9 @@
-package com.example.client;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package client;
+
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -26,8 +31,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.control.Alert.AlertType;
 
-public class HelloApplication extends Application {
+public class Client extends Application {
     public static Socket socket=null;
     ////////////////////////////////////////////MERGE/////////////////////////////////////
     public static String merge (String s1,String s2){
@@ -38,7 +46,7 @@ public class HelloApplication extends Application {
         String send,receive=null;
         try{
             String server_send=merge(s1,s2);
-            socket=new Socket("192.168.1.173",333);
+            socket=new Socket(Server,333);
             System.out.println(".....................now you can start chat ...................");
 //        BufferedReader keyr=new BufferedReader(new InputStreamReader(System.in));
             PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
@@ -73,7 +81,7 @@ public class HelloApplication extends Application {
         String send=null;
         try{
             String server_send=merge(s1,s2);
-            Socket socket=new Socket("192.168.1.173",333);
+            Socket socket=new Socket(Server,333);
             System.out.println(".....................now you can start chat ...................");
 
             PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
@@ -103,6 +111,7 @@ public class HelloApplication extends Application {
     String mail;
     LocalDate birth;
     int Phone;
+    static String Server;
 
     class item_qty {
 
@@ -128,14 +137,30 @@ public class HelloApplication extends Application {
 
         return result;
     }
+     public void pop_up_screen(String msg) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("warning");
+        alert.setHeaderText("warning");
+        alert.setContentText(msg);
+        alert.show();
+    }
 
-    public void search(String item_name) throws IOException {
-        ArrayList<String> items = parsing(removebrackets(request1("search", item_name)));
+     public void search(String item_name) throws IOException {
+        String[] a = removebracket(request1("search4item", item_name)).split(",");
+        ArrayList<String> items = new ArrayList<String>();
+        for (int i = 0; i < a.length; i++) {
+            items.add(a[i].trim());
+        }
+        //ArrayList<String> items = parsing(removebrackets(request1("search", item_name)));
+        if (items.size() == 0) {
+            pop_up_screen("No Available Item With This Name");
+            return;
+        }
         //ArrayList<String> items = searchForItem(item_name);
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i));
         }
-        EventHandler<MouseEvent> addcart
+        EventHandler<javafx.scene.input.MouseEvent> addcart
                 = new EventHandler<javafx.scene.input.MouseEvent>() {
 
             @Override
@@ -152,15 +177,16 @@ public class HelloApplication extends Application {
                 String name = l.getText();
                 int amount = Integer.parseInt(qty.getText());
                 System.out.println(name + " " + amount);
-                String qi = name + " " + amount;
-                String reply = null;
+                System.out.println(name + " " + amount);
+                String qi = name + "," + amount+","+Username;
+                String reply ="-1";
                 try {
                     reply = request1("add2cart", qi);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (Integer.parseInt(reply) == -1) {
-                    //pop up window
+                    pop_up_screen("no enough items");
                 }
                 //addToCart(name, amount);
             }
@@ -190,7 +216,7 @@ public class HelloApplication extends Application {
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-        newWindow.showAndWait();
+        newWindow.show();
     }
 
     public void cartScreen() throws IOException {
@@ -209,7 +235,7 @@ public class HelloApplication extends Application {
             @Override
             public void handle(javafx.scene.input.MouseEvent e) {
                 try {
-                    request1("purchase", ite);
+                    request1("purchase", Username);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -295,7 +321,7 @@ public class HelloApplication extends Application {
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-        newWindow.showAndWait();
+        newWindow.show();
     }
     public static ArrayList<String> arraylist(String message) {
         message = removebracket (message);
@@ -348,13 +374,43 @@ public class HelloApplication extends Application {
         // Set position of second window, related to primary window.
 //        newWindow.setX(primaryStage.getX() + 200);
 //        newWindow.setY(primaryStage.getY() + 100);
-        newWindow.showAndWait();
+        newWindow.show();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        first_page();
+        server_address();
 
+    }
+    
+    public void server_address(){
+        Stage stage = new Stage();
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(20);
+        HBox h1 = new HBox(7);
+        h1.setAlignment(Pos.CENTER);
+        Label se = new Label("server IP address");
+        h1.setMargin(se, new Insets(10, 10, 10, 10));
+        TextField ser = new TextField();
+        //Username=user.getText();
+        h1.setMargin(ser, new Insets(10, 10, 10, 10));
+        Button server = new Button("ok");
+        h1.setMargin(server, new Insets(10, 10, 10, 10));
+        h1.getChildren().addAll(se, ser);
+        server.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Server=ser.getText();
+                first_page() ;
+            }
+        }));
+        vbox.getChildren().addAll(h1,server);
+        Scene scene = new Scene(vbox, 400, 400);
+        stage.getIcons().add(icon());
+        stage.setTitle("Market");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void first_page() {
@@ -377,15 +433,17 @@ public class HelloApplication extends Application {
                 signUpScreen();
             }
         }));
+        
+        
         vbox.setMargin(login, new Insets(5, 10, 10, 10));
         vbox.setMargin(signUp, new Insets(10, 10, 10, 10));
         Scene scene = new Scene(vbox, 400, 400);
-//        ImageView i = new ImageView(icon());
-//        i.setFitHeight(scene.getHeight() / 3);
-//        i.setFitWidth(scene.getWidth() / 3);
-//        vbox.setMargin( new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll( login, signUp);
-//        stage.getIcons().add(icon());
+        ImageView i = new ImageView(icon());
+        i.setFitHeight(scene.getHeight() / 3);
+        i.setFitWidth(scene.getWidth() / 3);
+        vbox.setMargin(i, new Insets(10, 10, 10, 10));
+        vbox.getChildren().addAll(i, login, signUp);
+        stage.getIcons().add(icon());
         stage.setTitle("Market");
         stage.setScene(scene);
         stage.show();
@@ -406,7 +464,7 @@ public class HelloApplication extends Application {
         Scene s = new Scene(v, 300, 300);
         login.setScene(s);
         login.setTitle("Login screen");
-//        login.getIcons().add(icon());
+        login.getIcons().add(icon());
         HBox h1 = new HBox(7);
         h1.setAlignment(Pos.CENTER);
         Label username = new Label("Username");
@@ -453,7 +511,7 @@ public class HelloApplication extends Application {
         }));
         v.getChildren().addAll(h1, h2, Login);
 
-        login.showAndWait();
+        login.show();
     }
 
     public void signUpScreen() {
@@ -463,7 +521,7 @@ public class HelloApplication extends Application {
         Scene s = new Scene(v, 400, 400);
         signUp.setScene(s);
         signUp.setTitle("Sign up screen");
-//        signUp.getIcons().add(icon());
+        signUp.getIcons().add(icon());
         HBox h1 = new HBox(7);
         h1.setAlignment(Pos.CENTER);
         Label email = new Label("     Email     ");
@@ -520,7 +578,7 @@ public class HelloApplication extends Application {
             }
         }));
         v.getChildren().addAll(h1, h2, h3, h4, h5, sign);
-        signUp.showAndWait();
+        signUp.show();
     }
 
 
@@ -555,7 +613,7 @@ public class HelloApplication extends Application {
 
     public void home_display() {
         Stage window = new Stage();
-        //window.getIcons().add(icon());
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         StackPane layout = new StackPane();
         VBox vBox = new VBox();
@@ -628,6 +686,7 @@ public class HelloApplication extends Application {
 
             @Override
             public void handle(javafx.scene.input.MouseEvent e) {
+                window.close();
                 first_page();
             }
         };
@@ -660,13 +719,13 @@ public class HelloApplication extends Application {
             }
         };
         s.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, searching);
-        window.showAndWait();
+        window.show();
 
     }
 
     public void cash_display(String s) {
         Stage window = new Stage();
-//        window.getIcons().add(icon());
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -681,7 +740,7 @@ public class HelloApplication extends Application {
 
     public void history_display(String s) {
         Stage window = new Stage();
-//        window.getIcons().add(icon());
+        window.getIcons().add(icon());
 //        window.initModality(Modality.APPLICATION_MODAL);
         ScrollPane layout = new ScrollPane();
         window.setTitle("History");
@@ -696,7 +755,7 @@ public class HelloApplication extends Application {
 
     public void account_display(String s) {
         Stage window = new Stage();
-//        window.getIcons().add(icon());
+        window.getIcons().add(icon());
 //        window.initModality(Modality.APPLICATION_MODAL);
         ScrollPane layout = new ScrollPane();
         window.setTitle("Account Information");
@@ -709,7 +768,7 @@ public class HelloApplication extends Application {
 
     }
 
-  public void deposit_dislay() {
+    public void deposit_dislay() {
         Stage window = new Stage();
 //        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -722,9 +781,7 @@ public class HelloApplication extends Application {
         layout.getChildren().add(vBox);
         Scene scene;
         window.setTitle("Depisit");
-
         scene = new Scene(layout, 400, 400);
-
         window.setScene(scene);
         deposit.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -749,10 +806,11 @@ public class HelloApplication extends Application {
         }));
         window.show();
     }
+
     public void valid_deposit_display() {
 
         Stage window = new Stage();
-//        window.getIcons().add(icon());
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -762,12 +820,12 @@ public class HelloApplication extends Application {
         scene = new Scene(layout, 400, 400);
 
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
     }
 
     public void invalid_deposit_display() {
         Stage window = new Stage();
-//        window.getIcons().add(icon());
+        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
         BorderPane layout = new BorderPane();
         Scene scene;
@@ -777,14 +835,14 @@ public class HelloApplication extends Application {
         scene = new Scene(layout, 400, 400);
 
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
     }
 
     public String removebrackets(String s) {
         if(s.length() == 0){
             System.out.println("empty string");
         }
-        return s.substring(1, s.length() - 2);
+        return s.substring(1, s.length() - 1);
     }
 
     public String cash_server() throws IOException {
@@ -793,19 +851,18 @@ public class HelloApplication extends Application {
         return responce;
     }
 
-    public String history_server() throws IOException {
-        String result = new String("Item name : price : amount : date\n");
-        ArrayList<String> responce = new ArrayList<String>();
-        String s = request1("history", Username);
-        String s2 = removebrackets(s);
-        responce = parsing(s2);
-
-        int history_items = responce.size();
-        for (int i = 0; i < history_items; i++) {
-            result += responce.get(i) + "\n";
-        }
-        return result;
+public String history_server() throws IOException {
+    String result = new String("OID : Item name : price : amount : date\n");
+    ArrayList<String> responce = new ArrayList<String>();
+    String s = request1("history", Username);
+    String s2 = removebrackets(s);
+    responce = parsing(s2);
+    int history_items = responce.size();
+    for (int i = 0; i < history_items; i++) {
+        result += responce.get(i) + "\n";
     }
+    return result;
+}
 
     public String account_server() throws IOException {
         String result = new String();
@@ -830,6 +887,33 @@ public class HelloApplication extends Application {
     public void deposit_server(float amount) throws IOException {
         requestvoid("deposit", Username + "," + String.valueOf(amount));
 
+    }
+     public Image icon(){
+        String path="";
+        try {
+            String currentPath = new java.io.File(".").getCanonicalPath();
+
+            System.out.println(currentPath);
+            char c='/';
+            for(int i=0;i<currentPath.length();i++){
+                if(currentPath.charAt(i)=='/') {
+                    c='/';
+                    break;
+                }
+                else if(currentPath.charAt(i)=='\\'){
+                c='\\';
+            }
+            }
+
+          path=currentPath+c+"market.jpg";
+
+        
+        } catch (Exception e) {
+
+        }
+        Image logo=new Image(path);
+        return logo;
+        
     }
 
     public static void main(String[] args) throws IOException {
