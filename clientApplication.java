@@ -709,7 +709,7 @@ public class HelloApplication extends Application {
 
     }
 
-    public void deposit_dislay() {
+  public void deposit_dislay() {
         Stage window = new Stage();
 //        window.getIcons().add(icon());
         window.initModality(Modality.APPLICATION_MODAL);
@@ -731,9 +731,13 @@ public class HelloApplication extends Application {
                 try {
                     try {
                         float floatValue = Float.parseFloat(t.getText());
-                        deposit_server(floatValue);
-                        valid_deposit_display();
-                    } catch (NumberFormatException e) {
+                        if(floatValue < 0){
+                            invalid_deposit_display();
+                        }
+                        else {
+                            deposit_server(floatValue);
+                        }
+                    } catch (NumberFormatException e ){
                         invalid_deposit_display();
                     }
 
@@ -745,7 +749,6 @@ public class HelloApplication extends Application {
         }));
         window.show();
     }
-
     public void valid_deposit_display() {
 
         Stage window = new Stage();
