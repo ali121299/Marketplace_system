@@ -676,7 +676,7 @@ public class HelloApplication extends Application {
         scene = new Scene(layout, 400, 400);
 
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
     }
 
     public void history_display(String s) {
@@ -690,7 +690,7 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(layout, 400, 400);
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
 
     }
 
@@ -705,7 +705,7 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(layout, 400, 400);
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
 
     }
 
@@ -743,7 +743,7 @@ public class HelloApplication extends Application {
             }
 
         }));
-        window.showAndWait();
+        window.show();
     }
 
     public void valid_deposit_display() {
@@ -791,7 +791,7 @@ public class HelloApplication extends Application {
     }
 
     public String history_server() throws IOException {
-        String result = new String("Item name:price:date\n");
+        String result = new String("Item name : price : amount : date\n");
         ArrayList<String> responce = new ArrayList<String>();
         String s = request1("history", Username);
         String s2 = removebrackets(s);
