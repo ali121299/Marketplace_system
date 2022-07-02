@@ -82,7 +82,7 @@ public class Newserver extends Application{
         return result;
     }
 
-     public int purchase(String Username) {
+     public synchronized int purchase(String Username) {
         ArrayList<String[]> items = new ArrayList<String[]>();
         //get items in cart
         try {
@@ -358,7 +358,7 @@ public class Newserver extends Application{
         return s;
     }
 
-    public int addTocart(String message) {
+    public synchronized int addTocart(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[1]);
         String item_name = arrOfStr[0];
@@ -366,7 +366,7 @@ public class Newserver extends Application{
     }
 
     //add item to user cart
-    public int addToCart(String item_name, int qty) {
+    public synchronized int addToCart(String item_name, int qty) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
