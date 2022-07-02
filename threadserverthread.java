@@ -654,7 +654,12 @@ public static void signUp_handler(String s){
      
           send=cash;
         }
-         
+        else if(yrb[0].equals("items")){
+            System.out.println("da5lt");
+            String items = String.valueOf(marketserver.show_items(yrb[1]));
+            send = items;
+
+        }
         }
        
        
