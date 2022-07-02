@@ -90,7 +90,7 @@ public static ArrayList<String>  history(String user_name) {
 
     
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public int addTocart(String message) {
+    public synchronized int addTocart(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[1]);
         String item_name = arrOfStr[0];
@@ -149,7 +149,7 @@ public static ArrayList<String>  history(String user_name) {
         return temp;
     }
     //add item to user cart
-    public int addToCart(String item_name, int qty, String Username) {
+    public synchronized int addToCart(String item_name, int qty, String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -396,7 +396,7 @@ public static void signUp_handler(String s){
            
             }
     ////////////////////////////////////////////////////////PURCHASING/////////////////////////////////////////////////////
-    public int purchase(String Username) {
+    public synchronized int purchase(String Username) {
         ArrayList<String[]> items = new ArrayList<String[]>();
         //get items in cart
         try {
@@ -654,6 +654,7 @@ public static void signUp_handler(String s){
      
           send=cash;
         }
+         
         }
        
        
