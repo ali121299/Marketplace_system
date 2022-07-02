@@ -1,9 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package newserver;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -41,24 +40,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import static javafx.application.Application.launch;
-
- public class marketserver extends Application {
-
+/**
+ *
+ * @author DELL
+ */
+public class Newserver extends Application{
 
     TextField search = new TextField();
-    public static String Username;
-    public static String DB="Marketplace_System";
-    public static String DB_password="Sonsuza kadar";
-    public static String connector="com.mysql.jdbc.Driver";
+    String Username;
+    String DB;
+    String DB_password;
     GridPane grid = new GridPane();
     GridPane root = new GridPane();
     TextField qty = new TextField();
 
-    public static String Password;
+    String Password;
 
 
     class item_qty {
@@ -72,7 +68,7 @@ import static javafx.application.Application.launch;
         }
     }
 
-    private static Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
+    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         Node result = null;
         ObservableList<Node> childrens = gridPane.getChildren();
 
@@ -85,17 +81,8 @@ import static javafx.application.Application.launch;
 
         return result;
     }
-    public static void main(String[] args) throws IOException {
-        
-        new serverfinalfinal().start();
-        launch();
-        
-   
-         
-    }
 
-
- public static synchronized int purchase(String Username) {
+     public synchronized int purchase(String Username) {
         ArrayList<String[]> items = new ArrayList<String[]>();
         //get items in cart
         try {
@@ -267,7 +254,7 @@ import static javafx.application.Application.launch;
         return 1;
     }
 
-    public static int edit(String message) {
+    public int edit(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[0]);
         String item_name = arrOfStr[1];
@@ -276,7 +263,7 @@ import static javafx.application.Application.launch;
         return edit(qty, item_name, Username);
     }
     //edit cart
-    public static int edit(int qty, String item_name,String Username) {
+    public int edit(int qty, String item_name,String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -320,7 +307,7 @@ import static javafx.application.Application.launch;
     }
 
     //use search to get the items in cart of certain Username
-    public static ArrayList<String> search(String Username) {
+    public ArrayList<String> search(String Username) {
         ArrayList<String> items = new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -339,32 +326,9 @@ import static javafx.application.Application.launch;
         }
         return items;
     }
-  //show items
-  public static String show_items(String s) throws ClassNotFoundException {
-        String res = "";
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select Name ,Price from items ");
-            while (rs.next()) {
-                res += rs.getString(1);
-                res += ",";
-                res += rs.getString(2);
-                res += ",";
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        System.out.println("show items: " + res);
-        return res;
-
-    }
 
     //search for certain item in certain category
-    public static ArrayList<String> searchForItem(String text) {
+    public ArrayList<String> searchForItem(String text) {
         ArrayList<String> items = new ArrayList<String>();
         String[] s = name_cat(text);
         String item_name = s[0];
@@ -389,12 +353,12 @@ import static javafx.application.Application.launch;
         return items;
     }
 
-    private static String[] name_cat(String text) {
+    private String[] name_cat(String text) {
         String[] s = text.split(",");
         return s;
     }
 
-    public static synchronized int addTocart(String message) {
+    public synchronized int addTocart(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[1]);
         String item_name = arrOfStr[0];
@@ -402,7 +366,7 @@ import static javafx.application.Application.launch;
     }
 
     //add item to user cart
-    public static synchronized int addToCart(String item_name, int qty) {
+    public synchronized int addToCart(String item_name, int qty) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -435,7 +399,7 @@ import static javafx.application.Application.launch;
         return 1;
     }
 
-    public static void remove(String message) {
+    public void remove(String message) {
         String[] arrOfStr = message.split(",");
         String item_name = arrOfStr[0];
         int qty = Integer.parseInt(arrOfStr[1]);
@@ -444,7 +408,7 @@ import static javafx.application.Application.launch;
     }
 
     //remove item from user cart
-    public static void remove(String item_name, int qty, String Username) {
+    public void remove(String item_name, int qty, String Username) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -554,7 +518,7 @@ import static javafx.application.Application.launch;
         
         stage.showAndWait();
     }
-    public static ArrayList<String> Names(){
+    public ArrayList<String> Names(){
         ArrayList<String> r=new ArrayList<String>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -571,7 +535,7 @@ import static javafx.application.Application.launch;
         } 
         return r;
     }
-    public static ArrayList<Float> cash(){
+    public ArrayList<Float> cash(){
         ArrayList<Float> r=new ArrayList<Float>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -588,7 +552,7 @@ import static javafx.application.Application.launch;
         } 
         return r;
     }
-    public static double no_of_clients(){
+    public double no_of_clients(){
         double r=0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -605,7 +569,7 @@ import static javafx.application.Application.launch;
         } 
         return r;
     }
-    public static String loginValidation(String st){
+    public String loginValidation(String st){
         ArrayList <String>pa =parsing(st);
         String user=pa.get(0);
         String password=pa.get(1);
@@ -643,7 +607,7 @@ import static javafx.application.Application.launch;
         return s;
   
     }
-    public static void signUp_handler(String s){
+    public void signUp_handler(String s){
         ArrayList <String>pa =parsing(s);
         String name=pa.get(0);
         String pass=pa.get(1);
@@ -665,7 +629,7 @@ import static javafx.application.Application.launch;
 
     }
 
-    public static ArrayList<String> parsing(String s){
+    public ArrayList<String> parsing(String s){
         ArrayList<String>r=new ArrayList<String>();
         int init=0;
         for (int i=0;i<s.length();i++){
@@ -678,7 +642,7 @@ import static javafx.application.Application.launch;
         r.add(s.substring(init));
         return r;
     }
-    public static Image icon(){
+    public Image icon(){
         String path="";
         try {
             String currentPath = new java.io.File(".").getCanonicalPath();
@@ -707,35 +671,13 @@ import static javafx.application.Application.launch;
     }
 
 
-public static ArrayList<String>  history(String user_name) {
-    ArrayList<String> temp = new ArrayList<String>();
-    try {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
-        Statement stmt = con.createStatement();
-        String text1= "SELECT orderitems.OID,Item_name,totalprice,amount,date_time FROM account,orderspecs,orderitems WHERE account.Username =  orderspecs.Client_name " +
-                "AND orderspecs.OID = orderitems.OID AND  account.Username = \""+user_name+"\" "
-                ;
-        ResultSet rs1 = stmt.executeQuery(text1);
-        while (rs1.next()) {
-            String tempstr = "";
-            tempstr += String.valueOf(rs1.getInt(1))+" : "+rs1.getString(2) + " : "+String.valueOf(rs1.getFloat(3))+" : "+String.valueOf(rs1.getFloat(4))+" : "+String.valueOf(rs1.getDate(5));
-            temp.add(tempstr);
-        }
-        con.close();
-    } catch (Exception e) {
-        System.out.println(e);
+    public static void main(String[] args) {
+        launch();
     }
-    return temp;
-}
-
-
-   
 
 
 
-    public static String cashFunc(String user_name)  {
+    public  String cashFunc(String user_name)  {
         float temp=0;
         try {
 
@@ -756,35 +698,36 @@ public static ArrayList<String>  history(String user_name) {
         return String.valueOf(temp);
     }
 
-   
-    public static ArrayList<String> accountInfo(String user_name) {
-         ArrayList<String> temp = new ArrayList<String>();
-        String tempstr = "";
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con1 = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
-
-            Statement stmt1 = con1.createStatement();
-            String text1= "SELECT * From login_signup1 where login_signup1.Username = \"" +user_name+"\"";
-
-            ResultSet rs1 = stmt1.executeQuery(text1);
-            while (rs1.next()) {
-
-                tempstr += rs1.getString(1)+":"+rs1.getString(2)+":"+rs1.getString(3)+":"+rs1.getString(4)+":"+rs1.getString(5);
-                temp.add(tempstr);
-            }
-            con1.close();
-        } catch (Exception e) {
-            System.out.println(e);
+    
+public  ArrayList<String>  history(String user_name) {
+    ArrayList<String> temp = new ArrayList<String>();
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/" + DB,"root",DB_password);
+        Statement stmt = con.createStatement();
+        String text1= "SELECT orderitems.OID,Item_name,totalprice,amount,date_time FROM account,orderspecs,orderitems WHERE account.Username =  orderspecs.Client_name " +
+                "AND orderspecs.OID = orderitems.OID AND   account.Username = \""+user_name+"\" "
+                ;
+        ResultSet rs1 = stmt.executeQuery(text1);
+        while (rs1.next()) {
+            String tempstr = "";
+            tempstr += String.valueOf(rs1.getInt(1))+" : "+rs1.getString(2) + " : "+String.valueOf(rs1.getFloat(3))+" : "+String.valueOf(rs1.getFloat(4))+" : "+String.valueOf(rs1.getDate(5));
+            temp.add(tempstr);
         }
-        return temp;
+        con.close();
+    } catch (Exception e) {
+        System.out.println(e);
     }
-    public static void deposit(String par) {
+    return temp;
+}
+
+
+    public void deposit(String par) {
         float tempfloat = 0;
         try {
 
-             ArrayList<String> temp = new ArrayList<String>();
+            ArrayList<String> temp = new ArrayList<String>();
             temp = parsing(par);
             String user_name = temp.get(0);
             float amount = Float.parseFloat(temp.get(1));
@@ -806,151 +749,5 @@ public static ArrayList<String>  history(String user_name) {
         }
 
     }
-    
-
-
- 
-}
-/////////////////////////////////////mariamwaleed///////////////////////////////////////
- class ServerThread extends Thread {
-    ///////////////////////////////////////////////////global variables////////////////////////////////////////
-    public  Socket clientSocket;
-     public static String send=null;
-   public static ArrayList<String> searchitem;
-//  public static ArrayList<item_qty> s = new ArrayList<item_qty>();
-   public static  ArrayList<String> cart;
-   public static String DB="Market_ONLINE";
-   public static String DB_password="Mariam2018";
-   public static String connector="com.mysql.cj.jdbc.Driver";
-
- public ServerThread(Socket socket)
-   {this.clientSocket=socket;}
-       
-    @Override 
-        public void run(){
-    
-    
-    
-    try{
-        PrintWriter pw = new PrintWriter(clientSocket.getOutputStream(),true);
-        InputStreamReader isr=new InputStreamReader(clientSocket.getInputStream());//opening the input stream
-        BufferedReader ser_receive=new BufferedReader(isr);
-        String receive= null; String tst=null;String [] yrb;String sendtoclient=null;
-        while(true){
-        if((receive=ser_receive.readLine())!=null){
-        System.out.println("client : "+receive);
-        tst= receive;
-        yrb= tst.split(";");
-        for(int i=0;i<yrb.length;i++){
-            System.out.println(yrb[i]);
-        }
-        ////////// Cases ///////////
-        if(yrb[0].equals("login")){
-        sendtoclient=marketserver.loginValidation(yrb[1]);
-        send=sendtoclient;
-        }
-        else if(yrb[0].equals("signup")){
-       
-        marketserver.signUp_handler(yrb[1]);
-        
-        }
-        else if(yrb[0].equals("search4item")){
-         searchitem=marketserver.searchForItem(yrb[1]);
-            
-            send=searchitem.toString();
-        }
-        else if(yrb[0].equals("edit")){
-            String edit=String.valueOf(marketserver.edit(yrb[1]));
-       
-          send=edit;
-        
-        }
-        /////////////////////////////////////////////////////////////////////////////////////
-        else if(yrb[0].equals("search")){
-            cart=marketserver.search(yrb[1]);
-            send=cart.toString();
-            
-        }
-        else if (yrb[0].equals("purchase")){
-         String purchase=String.valueOf(marketserver.purchase(yrb[1]));
-     
-          send=purchase;
-//              System.out.println("hhhhhhhhhhhhhhhhhhhhhh");
-        }
-        else if(yrb[0].equals("remove")){
-        marketserver.remove(yrb[1]);
-        
-        }
-        else if(yrb[0].equals("add2cart")){
-        String add2cart=String.valueOf(marketserver.addTocart(yrb[1]));
-     
-          send=add2cart;
-        }
-        else if(yrb[0].equals("account")){
-        
-         cart=marketserver.accountInfo(yrb[1]);
-            send=cart.toString();
-        }
-        else if(yrb[0].equals("deposit")){
-          marketserver.deposit(yrb[1]);
-        }
-        else if(yrb[0].equals("history")){
-        cart=marketserver.history(yrb[1]);
-            send=cart.toString();
-        }
-        else if(yrb[0].equals("cash")){
-        String cash=String.valueOf(marketserver.cashFunc(yrb[1]));
-     
-          send=cash;
-        }
-        }
-       
-       
-
-       
-  
-//        if(send.equals("bye")){
-//        System.exit(0);
-//        }
- pw.println(send);
- pw.close();
-        }
-//        System.out.println(send);
-//        pw.println(send);
-    }
-        catch(Exception e){}
-    
-    
-
-//    public ServerThread(Socket socket) {
-//    }
-    
-}}
-///////////////////////////////////////////////////////////////FinalServer
-class Finalserver {
-   public ServerSocket ss;
-    public Socket socket;
-    public DataInputStream in;
-    public DataOutputStream out;
-    public BufferedReader br;
-    /**
-     * @param args the command line arguments
-     */
-    
-    public Finalserver() throws IOException{
-      
-       ss=new ServerSocket(333) ;
-       
-        System.out.println("waiting for a client");
-        
-        while (true) {
-            socket=ss.accept();
-            System.out.println("connected");
-            new ServerThread(socket).start();
-    
-    
-    }}
-    
-    
     
 }
