@@ -95,7 +95,7 @@ import static javafx.application.Application.launch;
     }
 
 
- public static int purchase(String Username) {
+ public static synchronized int purchase(String Username) {
         ArrayList<String[]> items = new ArrayList<String[]>();
         //get items in cart
         try {
@@ -339,6 +339,29 @@ import static javafx.application.Application.launch;
         }
         return items;
     }
+  //show items
+  public static String show_items(String s) throws ClassNotFoundException {
+        String res = "";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/" + DB, "root", DB_password);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select Name ,Price from items ");
+            while (rs.next()) {
+                res += rs.getString(1);
+                res += ",";
+                res += rs.getString(2);
+                res += ",";
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        System.out.println("show items: " + res);
+        return res;
+
+    }
 
     //search for certain item in certain category
     public static ArrayList<String> searchForItem(String text) {
@@ -371,7 +394,7 @@ import static javafx.application.Application.launch;
         return s;
     }
 
-    public static int addTocart(String message) {
+    public static synchronized int addTocart(String message) {
         String[] arrOfStr = message.split(",");
         int qty = Integer.parseInt(arrOfStr[1]);
         String item_name = arrOfStr[0];
@@ -379,7 +402,7 @@ import static javafx.application.Application.launch;
     }
 
     //add item to user cart
-    public static int addToCart(String item_name, int qty) {
+    public static synchronized int addToCart(String item_name, int qty) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
