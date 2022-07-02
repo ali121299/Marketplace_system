@@ -104,8 +104,7 @@ public class Client extends Application {
     }
     TextField search = new TextField();
     String Username;
-    GridPane grid = new GridPane();
-    GridPane root = new GridPane();
+
     TextField qty = new TextField();
     String Password;
     String mail;
@@ -152,10 +151,6 @@ ArrayList<String> items = new ArrayList<String>();
      public void itemsScreen() {
         System.out.println(items);
         ScrollPane layout = new ScrollPane();
-        VBox bv=new VBox();
-        bv.setAlignment(Pos.CENTER);
-        bv.setMargin(root,new Insets(10, 10, 10, 10));
-        bv.getChildren().add(root);
         GridPane root = new GridPane();
         root.setVgap(10);
         root.setHgap(10);
@@ -177,13 +172,14 @@ ArrayList<String> items = new ArrayList<String>();
     }
 
      public void search(String item_name) throws IOException {
+        GridPane root = new GridPane();
         String[] a = removebracket(request1("search4item", item_name)).split(",");
         ArrayList<String> items = new ArrayList<String>();
         for (int i = 0; i < a.length; i++) {
             items.add(a[i].trim());
         }
         //ArrayList<String> items = parsing(removebrackets(request1("search", item_name)));
-        if (items.size() == 0) {
+        if (items.size() == 1 && "".equals(items.get(0))) {
             pop_up_screen("No Available Item With This Name");
             return;
         }
@@ -251,6 +247,7 @@ ArrayList<String> items = new ArrayList<String>();
     }
 
     public void cartScreen() throws IOException {
+         GridPane grid = new GridPane();
         String it = "";
         ArrayList<String> items = arraylist(request1("search", Username));
         for (int i = 0; i < items.size(); i++) {
